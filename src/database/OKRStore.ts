@@ -1,7 +1,12 @@
 import { ObjectiveType } from "../types/OKRTypes";
 
-const defaultObjectives: ObjectiveType[] = [
+let dbIndex = 1;
+
+const db = new Map<number, ObjectiveType>();
+
+const defaultObjectives = [
   {
+    id: dbIndex++,
     objective: "Hire frontend Developer",
     keyResults: [
       {
@@ -15,12 +20,24 @@ const defaultObjectives: ObjectiveType[] = [
   },
 ];
 
+defaultObjectives.forEach((objective, index) => {
+    db.set(objective.id, objective);
+})
+
 function getOkrsData() : Promise<ObjectiveType[]> {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(defaultObjectives);
+      resolve(Array.from(db.values()));
     }, 3000);
   });
 }
 
-export { getOkrsData };
+function addOkrsDataToDB(okr : ObjectiveType): Promise<void>{
+    return new Promise((resolve)=>{
+        setTimeout(()=>{
+            db.set(dbIndex++, okr);
+            resolve();
+        }, 3000)
+    })
+}
+export { getOkrsData, addOkrsDataToDB };

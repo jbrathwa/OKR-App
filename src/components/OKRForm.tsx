@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Input from "./Input";
 import { KeyResultType, ObjectiveType } from "../types/OKRTypes";
+import { addOkrsDataToDB } from "../database/OKRStore";
 
 const defaultKeyResults = {
   title: "",
@@ -31,12 +32,17 @@ export default function OKRForm({
 
   function addNewObjective() {
     if (newObjective.length == 0 || keyResults.length == 0) return;
-    setObjectives([
-      ...objectives,
-      { objective: newObjective, keyResults: keyResults },
-    ]);
-    setKeyResults([defaultKeyResults]);
-    setNewObjective("");
+    const objectiveToBeAdded = { objective: newObjective, keyResults: keyResults };
+    addOkrsDataToDB(objectiveToBeAdded).then(()=>{
+      setObjectives([
+        ...objectives,
+        objectiveToBeAdded
+      ])
+      setKeyResults([defaultKeyResults]);
+      setNewObjective("");
+    }).catch((error)=>{
+      console.log(error)
+    })
   }
 
   function addNewKeyResults() {
