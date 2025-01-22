@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Input from "./components/Input";
 import { ObjectiveType } from "./types/OKRTypes";
 import OKRForm from "./components/OKRForm";
 import OKRDisplay from "./components/OKRDisplay";

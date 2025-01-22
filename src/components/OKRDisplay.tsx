@@ -9,7 +9,6 @@ export default function OKRDisplay({
   setObjectives: (e: ObjectiveType[]) => void;
   objectives: ObjectiveType[];
 }) {
-
   function deleteKeyResult(objectiveIdx: number, keyResultIdx: number) {
     const foundObj = objectives.find((_, idx) => objectiveIdx === idx);
 

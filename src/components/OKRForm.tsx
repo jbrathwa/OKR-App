@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Input from "./Input";
 import { KeyResultType, ObjectiveType } from "../types/OKRTypes";
 
-
 const defaultKeyResults = {
   title: "",
   initialValue: 0,
@@ -11,8 +10,13 @@ const defaultKeyResults = {
   metrics: "",
 };
 
-export default function OKRForm({setObjectives, objectives} : {setObjectives: (e: ObjectiveType[])=> void, objectives: ObjectiveType[]}) {
-
+export default function OKRForm({
+  setObjectives,
+  objectives,
+}: {
+  setObjectives: (e: ObjectiveType[]) => void;
+  objectives: ObjectiveType[];
+}) {
   const [newObjective, setNewObjective] = useState<string>("");
   const [keyResults, setKeyResults] = useState<KeyResultType[]>([
     defaultKeyResults,
@@ -22,13 +26,15 @@ export default function OKRForm({setObjectives, objectives} : {setObjectives: (e
     const keyResultToBeUpdated = keyResults[index];
     keyResults[index] = { ...keyResultToBeUpdated, [key]: value };
 
-    // keyResultObj.key = value;
     setKeyResults([...keyResults]);
   }
-  
+
   function addNewObjective() {
     if (newObjective.length == 0 || keyResults.length == 0) return;
-    setObjectives([...objectives, { objective: newObjective, keyResults: keyResults }]);
+    setObjectives([
+      ...objectives,
+      { objective: newObjective, keyResults: keyResults },
+    ]);
   }
 
   function addNewKeyResults() {
