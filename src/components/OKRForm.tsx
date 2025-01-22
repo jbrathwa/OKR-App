@@ -35,6 +35,8 @@ export default function OKRForm({
       ...objectives,
       { objective: newObjective, keyResults: keyResults },
     ]);
+    setKeyResults([defaultKeyResults]);
+    setNewObjective("");
   }
 
   function addNewKeyResults() {
@@ -54,6 +56,7 @@ export default function OKRForm({
             type="text"
             placeholder="Enter a objective"
             className="w-auto flex-grow"
+            value={newObjective}
             onChange={(e) => {
               setNewObjective(e.target.value);
             }}
@@ -74,6 +77,7 @@ export default function OKRForm({
           >
             <Input
               className="flex-grow"
+              value={keyResult.title}
               type="text"
               placeholder="Key Result Title 1"
               onChange={(e) => {
@@ -85,6 +89,7 @@ export default function OKRForm({
               className="flex justify-between flex-wrap gap-y-2"
             >
               <Input
+                value={keyResult.initialValue}
                 type="number"
                 placeholder="Initial Value"
                 onChange={(e) => {
@@ -93,6 +98,7 @@ export default function OKRForm({
               />
               <Input
                 type="number"
+                value={keyResult.currentValue}
                 placeholder="Current Value"
                 onChange={(e) => {
                   handleChange("currentValue", e.target.value, index);
@@ -100,6 +106,7 @@ export default function OKRForm({
               />
               <Input
                 type="text"
+                value={keyResult.metrics}
                 placeholder="Metrics Value"
                 onChange={(e) => {
                   handleChange("metrics", e.target.value, index);
@@ -107,6 +114,7 @@ export default function OKRForm({
               />
               <Input
                 type="number"
+                value={keyResult.targetValue}
                 placeholder="Target Value"
                 onChange={(e) => {
                   handleChange("targetValue", e.target.value, index);

@@ -10,5 +10,9 @@ type ObjectiveType = {
   objective: string;
   keyResults: KeyResultType[];
 };
+type KeyResultModalType = {
+    isOpen: boolean,
+    objectiveIndex: number
+}
 
-export type {KeyResultType, ObjectiveType}; 
+export type {KeyResultType, ObjectiveType, KeyResultModalType}; 
