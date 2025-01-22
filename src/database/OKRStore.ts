@@ -1,5 +1,9 @@
 import { ObjectiveType } from "../types/OKRTypes";
 
+type InitialObjectiveType = ObjectiveType & {
+  id: number
+} 
+
 let dbIndex = 1;
 
 const db = new Map<number, ObjectiveType>();
@@ -20,7 +24,7 @@ const defaultObjectives = [
   },
 ];
 
-defaultObjectives.forEach((objective, index) => {
+defaultObjectives.forEach((objective: InitialObjectiveType, index: number) => {
     db.set(objective.id, objective);
 })
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Input from "./Input";
 import { KeyResultType, ObjectiveType } from "../types/OKRTypes";
 import { addOkrsDataToDB } from "../database/OKRStore";
+import { Loader, LoaderCircle } from "lucide-react";
 
 const defaultKeyResults = {
   title: "",
@@ -18,6 +19,7 @@ export default function OKRForm({
   setObjectives: (e: ObjectiveType[]) => void;
   objectives: ObjectiveType[];
 }) {
+  const [isWaitingForInsert, setIsWaitingForInsert] = useState<boolean>(false);
   const [newObjective, setNewObjective] = useState<string>("");
   const [keyResults, setKeyResults] = useState<KeyResultType[]>([
     defaultKeyResults,
@@ -31,6 +33,7 @@ export default function OKRForm({
   }
 
   function addNewObjective() {
+    setIsWaitingForInsert(true);      
     if (newObjective.length == 0 || keyResults.length == 0) return;
     const objectiveToBeAdded = { objective: newObjective, keyResults: keyResults };
     addOkrsDataToDB(objectiveToBeAdded).then(()=>{
@@ -40,6 +43,7 @@ export default function OKRForm({
       ])
       setKeyResults([defaultKeyResults]);
       setNewObjective("");
+      setIsWaitingForInsert(false);
     }).catch((error)=>{
       console.log(error)
     })
@@ -143,9 +147,9 @@ export default function OKRForm({
         </button>
         <button
           onClick={addNewObjective}
-          className="bg-green-400 hover:bg-green-500 px-4 py-2 rounded-md text-white text-sm font-medium"
+          className="bg-green-400 hover:bg-green-500 px-4 py-2 rounded-md text-white text-sm font-medium flex items-center"
         >
-          Add Objective
+          {isWaitingForInsert && <LoaderCircle className="w-4 h-4 mr-1 animate-spin" />} Add Objective
         </button>
       </div>
     </div>
