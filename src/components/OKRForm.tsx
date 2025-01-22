@@ -58,14 +58,14 @@ export default function OKRForm({
       className="w-2/5 overflow-y-scroll border-2 space-y-4 rounded-md bg-gray-50 shadow-md"
     >
       <div className="sticky top-0 bg-gray-50 shadow-sm space-y-3 px-8 py-4">
-        <h1 className="font-bold text-lg">OKR Application</h1>
+        <h1 className="font-bold text-lg text-blue-500 text-center">OKR Application</h1>
 
-        <div id="objectForm" className="w-full flex space-x-2 items-center">
-          <label htmlFor="">Objective</label>
+        <div id="objectForm" className="w-full flex flex-col space-y-2">
+          <label className="font-medium" htmlFor="">Objective</label>
           <Input
             type="text"
             placeholder="Enter a objective"
-            className="w-auto flex-grow"
+            className="flex-grow"
             value={newObjective}
             onChange={(e) => {
               setNewObjective(e.target.value);
@@ -143,7 +143,7 @@ export default function OKRForm({
           onClick={addNewKeyResults}
           className="bg-blue-400 hover:bg-blue-500  px-4 py-2 rounded-md text-white text-sm font-medium"
         >
-          Add key values
+          Add key Results
         </button>
         <button
           onClick={addNewObjective}

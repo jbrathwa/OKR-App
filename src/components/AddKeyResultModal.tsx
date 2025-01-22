@@ -53,12 +53,15 @@ export default function AddKeyResultModal({
         id="firstKeyResult"
         className="bg-white relative border-3 rounded-md p-10 w-1/2 flex flex-col space-y-2"
       >
-        <button
-          onClick={closeModal}
-          className="absolute right-3 top-3 text-red-500"
-        >
-          <CircleX />
-        </button>
+        <div className="w-full flex justify-between mb-3">
+          <h1 className="text-blue-500 font-medium">{objectives[keyResultModal.objectiveIndex].objective}</h1>
+          <button
+            onClick={closeModal}
+            className="text-red-500"
+          >
+            <CircleX className="w-5 h-5" />
+          </button>
+        </div>
         <Input
           value={keyResult.title}
           className="flex-grow"
@@ -108,7 +111,7 @@ export default function AddKeyResultModal({
             onClick={() => handleAddKeyResult()}
             className="bg-blue-400 hover:bg-blue-500  px-4 py-2 rounded-md text-white text-sm font-medium"
           >
-            Add key values
+            Add key Result
           </button>
         </div>
       </div>
