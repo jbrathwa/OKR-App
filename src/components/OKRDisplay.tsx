@@ -22,6 +22,11 @@ export default function OKRDisplay({
     });
 
     setObjectives(updatedObjectives);
+}
+
+function deleteObjective(index: number) {
+    const updatedObjectives = objectives.filter((_, idx) => index !== idx);
+    setObjectives(updatedObjectives);
   }
 
   return (
@@ -40,6 +45,7 @@ export default function OKRDisplay({
                 <h1 className="font-bold text-lg">
                   {objectiveIdx} {iter.objective}
                 </h1>
+                <button onClick={() => deleteObjective(objectiveIdx)} className="text-red-500">Delete Objective</button>
               </div>
               {iter.keyResults.map((elem, index) => (
                 <div key={index}>
