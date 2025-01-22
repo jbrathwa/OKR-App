@@ -8,8 +8,9 @@ const MetricsLabel = ({
   className?: string;
 }) => {
   return (
-    <p className={`w-[250px] truncate flex justify-between text-sm my-1 ${className}`}>
-      <b className={`text-gray-700 ${className}`}>{label}</b> {value}
+    <p className={`w-full flex justify-between text-xs font-medium my-2 ${className}`}>
+      <p className={`text-gray-700 ${className} bg-gray-200 px-2 rounded-full`}>{label}</p> 
+      <p className="w-[100px] truncate text-right">{value}</p>
     </p>
   );
 };

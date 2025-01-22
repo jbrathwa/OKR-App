@@ -19,7 +19,7 @@ function getOkrsData() : Promise<ObjectiveType[]> {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(defaultObjectives);
-    }, 2000);
+    }, 3000);
   });
 }
 

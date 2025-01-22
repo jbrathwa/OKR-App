@@ -46,11 +46,11 @@ export default function OKRDisplay({
           return (
             <div
               key={objectiveIdx}
-              className="w-72 h-max border rounded-md p-5 shadow-md"
+              className="w-72 h-max border border-gray-200 rounded-md p-5 shadow"
             >
               <div className="flex justify-between">
-                <h1 className="font-bold text-lg">
-                  {objectiveIdx} {iter.objective}
+                <h1 className="font-bold text-lg w-[180px] truncate">
+                  {iter.objective}
                 </h1>
                 <div className="flex items-center gap-x-3">
                   <button
@@ -74,11 +74,11 @@ export default function OKRDisplay({
               </div>
               {iter.keyResults.length > 0 ? (
                 iter.keyResults.map((elem, index) => (
-                  <div key={index} className="relative">
+                  <div key={index} className="relative pt-2">
                     {iter.keyResults.length > 1 && <hr className="my-3" />}
                     <button
                       onClick={() => deleteKeyResult(objectiveIdx, index)}
-                      className="text-red-500 absolute top-1/2 -translate-y-1/2 -right-10 shadow-lg border hover:shadow-inner rounded-full bg-white p-2"
+                      className="text-red-500 absolute top-1/2 -translate-y-1/2  -right-10 shadow-lg border hover:shadow-inner rounded-full bg-white p-2"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
