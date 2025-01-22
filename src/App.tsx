@@ -48,6 +48,18 @@ function App() {
     setKeyResults([...keyResults]);
   }
 
+  function deleteKeyResult(objectiveIdx: number, keyResultIdx: number){
+    const foundObj = objectives.find((_, idx)=> objectiveIdx === idx);
+    console.log(keyResultIdx, objectiveIdx)
+    if(foundObj === undefined) return;
+    foundObj.keyResults = foundObj?.keyResults.filter((_, krIdx) => krIdx !== keyResultIdx);
+    const updatedObjectives = objectives.map((objective, idx)=>{
+      return idx === objectiveIdx ? foundObj : objective;
+    })
+    console.log(updatedObjectives)
+    setObjectives(updatedObjectives);
+  }
+
   return (
     <main className="w-full h-screen flex justify-between space-y-4">
       <div
@@ -144,20 +156,20 @@ function App() {
 
       <div id="showObjectives" className="w-1/2 overflow-y-scroll flex flex-wrap gap-10">
         {objectives.length > 0 ? (
-          objectives.map((iter, index) => {
+          objectives.map((iter, objectiveIdx) => {
             return (
-              <div key={index} className="w-72 h-max border rounded-md p-5">
+              <div key={objectiveIdx} className="w-72 h-max border rounded-md p-5">
                 <div className="flex justify-between">
                   <h1 className="font-bold text-lg">
-                    {index + 1} {iter.objective}
+                    {objectiveIdx} {iter.objective}
                   </h1>
-                  <button className="text-red-500">Delete</button>
                 </div>
                 {iter.keyResults.map((elem, index) => (
                   <div key={index}>
                     {iter.keyResults.length > 1 && <hr className="my-3" />}
+                    <button onClick={() => deleteKeyResult(objectiveIdx, index)} className="text-red-500">Delete</button>
                     <MetricsLabel
-                      label={"Key " + index++}
+                      label={"Key"}
                       value={elem.title}
                     />
                     <MetricsLabel
