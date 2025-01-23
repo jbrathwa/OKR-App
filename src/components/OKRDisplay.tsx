@@ -102,7 +102,7 @@ export default function OKRDisplay({
                   </div>
                 ))
               ) : (
-                <p className="text-sm">No Key-Results Exists.</p>
+                <p className="text-sm text-center">No Key-Results Exists.</p>
               )}
             </div>
           );

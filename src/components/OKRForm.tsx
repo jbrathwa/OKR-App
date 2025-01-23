@@ -33,8 +33,11 @@ export default function OKRForm({
   }
 
   function addNewObjective() {
+    if (newObjective.length == 0 || keyResults.length == 0){
+      alert("Please fill all required field value");
+      return;
+    }
     setIsWaitingForInsert(true);      
-    if (newObjective.length == 0 || keyResults.length == 0) return;
     const objectiveToBeAdded = { objective: newObjective, keyResults: keyResults };
     addOkrsDataToDB(objectiveToBeAdded).then(()=>{
       setObjectives([

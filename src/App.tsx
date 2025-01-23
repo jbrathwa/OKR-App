@@ -20,7 +20,7 @@ function App() {
       <OKRForm setObjectives={setObjectives} objectives={objectives ?? []} />
       {
         isLoading ? <p className="m-auto text-lg text-blue-400 font-medium flex items-center justify-center">
-           <LoaderCircle className="animate-spin mr-2" /> Loading...</p> : <OKRDisplay setObjectives={setObjectives} objectives={objectives} />
+           <LoaderCircle className="animate-spin mr-2" /> Fetching your data...</p> : <OKRDisplay setObjectives={setObjectives} objectives={objectives} />
       }
     </main>
   );
