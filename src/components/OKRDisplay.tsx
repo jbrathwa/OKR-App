@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { KeyResultModalType, ObjectiveType } from "../types/OKRTypes";
 import MetricsLabel from "./MetricLabel";
-import { SquarePlus, Trash2 } from "lucide-react";
+import { FilePenLine, SquarePlus, Trash2 } from "lucide-react";
 import AddKeyResultModal from "./AddKeyResultModal";
 
 export default function OKRDisplay({
   setObjectives,
   objectives,
+  setObjectiveForUpdate
 }: {
   setObjectives: (e: ObjectiveType[]) => void;
   objectives: ObjectiveType[];
+  setObjectiveForUpdate: React.Dispatch<React.SetStateAction<ObjectiveType>>
 }) {
   const [keyResultModal, setKeyResultModal] = useState<KeyResultModalType>({
     isOpen: false,
@@ -36,13 +38,15 @@ export default function OKRDisplay({
     setObjectives(updatedObjectives);
   }
 
+
+
   return (
     <div
       id="showObjectives"
       className="w-1/2 overflow-y-scroll flex flex-wrap gap-10"
     >
       {objectives.length > 0 ? (
-        objectives.map((iter, objectiveIdx) => {
+        objectives.map((objective, objectiveIdx) => {
           return (
             <div
               key={objectiveIdx}
@@ -50,7 +54,7 @@ export default function OKRDisplay({
             >
               <div className="flex items-center justify-between">
                 <h1 className="font-bold text-lg w-[180px] truncate mb-2">
-                  {iter.objective}
+                  {objective.objective}
                 </h1>
                 <div className="flex items-center gap-x-3 -mt-2">
                   <button
@@ -70,10 +74,15 @@ export default function OKRDisplay({
                   >
                     <SquarePlus className="w-4 h-4" />
                   </button>
+                  <button onClick={()=>{
+                    setObjectiveForUpdate(objective)
+                  }}>
+                    <FilePenLine className="w-4 h-4 text-blue-500" />
+                  </button>
                 </div>
               </div>
-              {iter.keyResults.length > 0 ? (
-                iter.keyResults.map((elem, index) => (
+              {objective.keyResults.length > 0 ? (
+                objective.keyResults.map((elem, index) => (
                   <div key={index} className="relative pt-2 bg-gray-100 p-3 my-2 rounded-md">
                     <button
                       onClick={() => deleteKeyResult(objectiveIdx, index)}

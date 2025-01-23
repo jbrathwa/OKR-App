@@ -42,6 +42,14 @@ function addOkrsDataToDB(okr: InsertObjectiveType): Promise<ObjectiveType> {
   });
 }
 
+function updateOkrsDataToDb(objectiveTobeUpdated: InsertObjectiveType, okrId: string) : Promise<ObjectiveType>{
+  return new Promise((resolve)=>{
+    setTimeout(()=>{
+      let updatedObjectiveWithId = {id: okrId, ...objectiveTobeUpdated};
+      db.set(okrId, updatedObjectiveWithId);
+      resolve(updatedObjectiveWithId);
+    }, 1000)
+  })
+}
 
-
-export { getOkrsData, addOkrsDataToDB };
+export { getOkrsData, addOkrsDataToDB, updateOkrsDataToDb };

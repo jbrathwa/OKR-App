@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "./Input";
-import { InsertObjectiveType, KeyResultType, ObjectiveType } from "../types/OKRTypes";
-import { addOkrsDataToDB } from "../database/OKRStore";
+import {
+  InsertObjectiveType,
+  KeyResultType,
+  ObjectiveType,
+} from "../types/OKRTypes";
+import { addOkrsDataToDB, updateOkrsDataToDb } from "../database/OKRStore";
 import { LoaderCircle } from "lucide-react";
 
 const defaultKeyResults = {
@@ -15,15 +19,26 @@ const defaultKeyResults = {
 export default function OKRForm({
   setObjectives,
   objectives,
+  objectiveForUpdate,
 }: {
   setObjectives: (e: ObjectiveType[]) => void;
   objectives: ObjectiveType[];
+  objectiveForUpdate: ObjectiveType;
 }) {
   const [isWaitingForInsert, setIsWaitingForInsert] = useState<boolean>(false);
+  const [isUpdateForm, setIsUpdateForm] = useState<boolean>(false);
   const [newObjective, setNewObjective] = useState<string>("");
   const [keyResults, setKeyResults] = useState<KeyResultType[]>([
     defaultKeyResults,
   ]);
+
+  useEffect(() => {
+    if (objectiveForUpdate.id) {
+      setNewObjective(objectiveForUpdate.objective);
+      setKeyResults(objectiveForUpdate.keyResults);
+      setIsUpdateForm(true);
+    }
+  }, [objectiveForUpdate]);
 
   function handleChange(key: string, value: string, index: number) {
     const keyResultToBeUpdated = keyResults[index];
@@ -34,28 +49,53 @@ export default function OKRForm({
 
   function addNewObjective() {
     // validation
-    if (newObjective.length == 0 || keyResults.length == 0){
+    if (newObjective.length == 0 || keyResults.length == 0) {
       alert("Please fill all required field value");
       return;
     }
 
     // set loader true
-    setIsWaitingForInsert(true);      
-    const objectiveToBeAdded = { objective: newObjective, keyResults: keyResults };
+    setIsWaitingForInsert(true);
+    const objectiveToBeAdded = {
+      objective: newObjective,
+      keyResults: keyResults,
+    };
 
     // inserting objectived into db.
-    addOkrsDataToDB(objectiveToBeAdded).then((data : ObjectiveType)=>{
-      setObjectives([
-        ...objectives,
-        data
-      ])
-      setKeyResults([defaultKeyResults]);
+    addOkrsDataToDB(objectiveToBeAdded)
+      .then((data: ObjectiveType) => {
+        setObjectives([...objectives, data]);
+        setKeyResults([defaultKeyResults]);
+        setNewObjective("");
+        setIsWaitingForInsert(false);
+        console.log(objectives);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function handleUpdateObjective(){
+    setIsWaitingForInsert(true);
+
+    const objectiveToBeUpdated = {
+      objective: newObjective,
+      keyResults: keyResults,
+    };
+
+    updateOkrsDataToDb(objectiveToBeUpdated, objectiveForUpdate.id).then((data)=>{
+      const updatedObjectives = objectives.map((objective)=>{
+        return (objective.id === data.id) ? data : objective;
+      })
+      setObjectives([...updatedObjectives]);
+
+      // Reset
       setNewObjective("");
+      setKeyResults([defaultKeyResults]);
+      setIsUpdateForm(false);
       setIsWaitingForInsert(false);
-      console.log(objectives);
-    }).catch((error)=>{
-      console.log(error)
     })
+
   }
 
   function addNewKeyResults() {
@@ -67,10 +107,14 @@ export default function OKRForm({
       className="w-2/5 overflow-y-scroll border-2 space-y-4 rounded-md bg-gray-50 shadow-md"
     >
       <div className="sticky top-0 bg-gray-50 shadow-sm space-y-3 px-8 py-4">
-        <h1 className="font-bold text-lg text-blue-500 text-center">OKR Application</h1>
+        <h1 className="font-bold text-lg text-blue-500 text-center">
+          OKR Application
+        </h1>
 
         <div id="objectForm" className="w-full flex flex-col space-y-2">
-          <label className="font-medium" htmlFor="">Objective</label>
+          <label className="font-medium" htmlFor="">
+            Objective
+          </label>
           <Input
             type="text"
             placeholder="Enter a objective"
@@ -155,10 +199,13 @@ export default function OKRForm({
           Add key Results
         </button>
         <button
-          onClick={addNewObjective}
+          onClick={isUpdateForm ? handleUpdateObjective : addNewObjective}
           className="bg-green-400 hover:bg-green-500 px-4 py-2 rounded-md text-white text-sm font-medium flex items-center"
         >
-          {isWaitingForInsert && <LoaderCircle className="w-4 h-4 mr-1 animate-spin" />} Add Objective
+          {isWaitingForInsert && (
+            <LoaderCircle className="w-4 h-4 mr-1 animate-spin" />
+          )}{" "}
+          {isUpdateForm ? "Update Objective" : `Add Objective`}
         </button>
       </div>
     </div>
