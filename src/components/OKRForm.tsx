@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Input from "./Input";
 import { KeyResultType, ObjectiveType } from "../types/OKRTypes";
 import { addOkrsDataToDB } from "../database/OKRStore";
-import { Loader, LoaderCircle } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 
 const defaultKeyResults = {
   title: "",

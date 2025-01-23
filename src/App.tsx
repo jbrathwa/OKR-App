@@ -3,7 +3,7 @@ import { ObjectiveType } from "./types/OKRTypes";
 import OKRForm from "./components/OKRForm";
 import OKRDisplay from "./components/OKRDisplay";
 import { getOkrsData } from "./database/OKRStore";
-import { Loader2, LoaderCircle } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 function App() {
   const [objectives, setObjectives] = useState<ObjectiveType[] | undefined>();
   

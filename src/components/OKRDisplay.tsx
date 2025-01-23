@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { KeyResultModalType, ObjectiveType } from "../types/OKRTypes";
 import MetricsLabel from "./MetricLabel";
 import { SquarePlus, Trash2 } from "lucide-react";
@@ -77,7 +77,7 @@ export default function OKRDisplay({
                   <div key={index} className="relative pt-2 bg-gray-100 p-3 my-2 rounded-md">
                     <button
                       onClick={() => deleteKeyResult(objectiveIdx, index)}
-                      className="bg-red-500 text-white absolute top-1/2 -translate-y-1/2 -right-10 shadow-lg hover:shadow-inner rounded-full bg-white p-2"
+                      className="bg-red-500 text-white absolute top-1/2 -translate-y-1/2 -right-10 shadow-lg hover:shadow-inner rounded-full p-2"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
