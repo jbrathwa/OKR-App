@@ -1,16 +1,11 @@
-import { ObjectiveType } from "../types/OKRTypes";
+import { InsertObjectiveType, ObjectiveType } from "../types/OKRTypes";
+import { v4 as uuidv4 } from "uuid";
 
-type InitialObjectiveType = ObjectiveType & {
-  id: number
-} 
-
-let dbIndex = 1;
-
-const db = new Map<number, ObjectiveType>();
+const db = new Map<string, ObjectiveType>();
 
 const defaultObjectives = [
   {
-    id: dbIndex++,
+    id: uuidv4(),
     objective: "Hire frontend Developer",
     keyResults: [
       {
@@ -24,24 +19,29 @@ const defaultObjectives = [
   },
 ];
 
-defaultObjectives.forEach((objective: InitialObjectiveType, index: number) => {
-    db.set(objective.id, objective);
-})
+defaultObjectives.forEach((objective: ObjectiveType) => {
+  db.set(objective.id, objective);
+});
 
-function getOkrsData() : Promise<ObjectiveType[]> {
+function getOkrsData(): Promise<ObjectiveType[]> {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(Array.from(db.values()));
-    }, 3000);
+    }, 1000);
   });
 }
 
-function addOkrsDataToDB(okr : ObjectiveType): Promise<void>{
-    return new Promise((resolve)=>{
-        setTimeout(()=>{
-            db.set(dbIndex++, okr);
-            resolve();
-        }, 3000)
-    })
+function addOkrsDataToDB(okr: InsertObjectiveType): Promise<ObjectiveType> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      let id = uuidv4();
+      let objectiveTobeAdded = { id, ...okr };
+      db.set(id, objectiveTobeAdded);
+      resolve(objectiveTobeAdded);
+    }, 1000);
+  });
 }
+
+
+
 export { getOkrsData, addOkrsDataToDB };

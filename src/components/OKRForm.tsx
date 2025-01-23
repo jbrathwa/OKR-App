@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Input from "./Input";
-import { KeyResultType, ObjectiveType } from "../types/OKRTypes";
+import { InsertObjectiveType, KeyResultType, ObjectiveType } from "../types/OKRTypes";
 import { addOkrsDataToDB } from "../database/OKRStore";
 import { LoaderCircle } from "lucide-react";
 
@@ -33,20 +33,26 @@ export default function OKRForm({
   }
 
   function addNewObjective() {
+    // validation
     if (newObjective.length == 0 || keyResults.length == 0){
       alert("Please fill all required field value");
       return;
     }
+
+    // set loader true
     setIsWaitingForInsert(true);      
     const objectiveToBeAdded = { objective: newObjective, keyResults: keyResults };
-    addOkrsDataToDB(objectiveToBeAdded).then(()=>{
+
+    // inserting objectived into db.
+    addOkrsDataToDB(objectiveToBeAdded).then((data : ObjectiveType)=>{
       setObjectives([
         ...objectives,
-        objectiveToBeAdded
+        data
       ])
       setKeyResults([defaultKeyResults]);
       setNewObjective("");
       setIsWaitingForInsert(false);
+      console.log(objectives);
     }).catch((error)=>{
       console.log(error)
     })
