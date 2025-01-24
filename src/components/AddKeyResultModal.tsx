@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import {
   KeyResultModalType,
   KeyResultType,
-  ObjectiveType,
 } from "../types/OKRTypes";
 import Input from "./Input";
 import { CircleX } from "lucide-react";
