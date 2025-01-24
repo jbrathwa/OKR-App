@@ -5,7 +5,7 @@ export default function Input({
   className,
   value
 }: {
-  type: string;
+  type: "text" | "number";
   placeholder: string;
   onChange: (e: any) => any;
   className?: string;

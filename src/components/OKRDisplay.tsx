@@ -1,24 +1,24 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { KeyResultModalType, ObjectiveType } from "../types/OKRTypes";
 import MetricsLabel from "./MetricLabel";
 import { FilePenLine, SquarePlus, Trash2 } from "lucide-react";
 import AddKeyResultModal from "./AddKeyResultModal";
+import { OkrContext } from "../context/OkrProvider";
 
 export default function OKRDisplay({
-  setObjectives,
-  objectives,
   setObjectiveForUpdate
 }: {
-  setObjectives: (e: ObjectiveType[]) => void;
-  objectives: ObjectiveType[];
   setObjectiveForUpdate: React.Dispatch<React.SetStateAction<ObjectiveType>>
 }) {
+    const {objectives, setObjectives} = useContext(OkrContext)
+  
   const [keyResultModal, setKeyResultModal] = useState<KeyResultModalType>({
     isOpen: false,
     objectiveIndex: -1,
   });
 
   function deleteKeyResult(objectiveIdx: number, keyResultIdx: number) {
+    if(objectives === null) return;
     const foundObj = objectives.find((_, idx) => objectiveIdx === idx);
 
     if (foundObj === undefined) return;
@@ -34,6 +34,8 @@ export default function OKRDisplay({
   }
 
   function deleteObjective(index: number) {
+    if(objectives === null) return;
+
     const updatedObjectives = objectives.filter((_, idx) => index !== idx);
     setObjectives(updatedObjectives);
   }
@@ -45,7 +47,7 @@ export default function OKRDisplay({
       id="showObjectives"
       className="w-1/2 overflow-y-scroll flex flex-wrap gap-10"
     >
-      {objectives.length > 0 ? (
+      {objectives != null && objectives.length > 0 ? (
         objectives.map((objective, objectiveIdx) => {
           return (
             <div
@@ -83,7 +85,7 @@ export default function OKRDisplay({
               </div>
               {objective.keyResults.length > 0 ? (
                 objective.keyResults.map((elem, index) => (
-                  <div key={index} className="relative pt-2 bg-gray-100 p-3 my-2 rounded-md">
+                  <div key={index} className="relative pt-2 bg-gray-100 p-3 mt-2 rounded-md">
                     <button
                       onClick={() => deleteKeyResult(objectiveIdx, index)}
                       className="bg-red-500 text-white absolute top-1/2 -translate-y-1/2 -right-10 shadow-lg hover:shadow-inner rounded-full p-2"
@@ -122,8 +124,6 @@ export default function OKRDisplay({
       {keyResultModal.isOpen && (
         <AddKeyResultModal
           keyResultModal={keyResultModal}
-          objectives={objectives}
-          setObjectives={setObjectives}
           closeModal={() =>
             setKeyResultModal({ isOpen: false, objectiveIndex: -1 })
           }

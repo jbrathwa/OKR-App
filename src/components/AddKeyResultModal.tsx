@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   KeyResultModalType,
   KeyResultType,
@@ -6,6 +6,7 @@ import {
 } from "../types/OKRTypes";
 import Input from "./Input";
 import { CircleX } from "lucide-react";
+import { OkrContext } from "../context/OkrProvider";
 const defaultKeyResults = {
   title: "",
   initialValue: 0,
@@ -17,17 +18,16 @@ const defaultKeyResults = {
 export default function AddKeyResultModal({
   closeModal,
   keyResultModal,
-  setObjectives,
-  objectives,
 }: {
   closeModal: () => void;
   keyResultModal: KeyResultModalType;
-  setObjectives: (e: ObjectiveType[]) => void;
-  objectives: ObjectiveType[];
 }) {
+      const {objectives, setObjectives} = useContext(OkrContext)
+  
   const [keyResult, setKeyResult] = useState<KeyResultType>(defaultKeyResults);
 
   function handleAddKeyResult() {
+    if(objectives === null) return;
     const foundObj = objectives.find(
       (_, idx) => keyResultModal.objectiveIndex === idx
     );
@@ -54,7 +54,7 @@ export default function AddKeyResultModal({
         className="bg-white relative border-3 rounded-md p-10 w-1/2 flex flex-col space-y-2"
       >
         <div className="w-full flex justify-between mb-3">
-          <h1 className="text-blue-500 font-medium">{objectives[keyResultModal.objectiveIndex].objective}</h1>
+          <h1 className="text-blue-500 font-medium">{objectives != null && objectives[keyResultModal.objectiveIndex].objective}</h1>
           <button
             onClick={closeModal}
             className="text-red-500"

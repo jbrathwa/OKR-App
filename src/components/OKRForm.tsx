@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Input from "./Input";
 import {
-  InsertObjectiveType,
   KeyResultType,
   ObjectiveType,
 } from "../types/OKRTypes";
 import { addOkrsDataToDB, updateOkrsDataToDb } from "../database/OKRStore";
 import { LoaderCircle } from "lucide-react";
+import { OkrContext } from "../context/OkrProvider";
 
 const defaultKeyResults = {
   title: "",
@@ -17,14 +17,11 @@ const defaultKeyResults = {
 };
 
 export default function OKRForm({
-  setObjectives,
-  objectives,
   objectiveForUpdate,
 }: {
-  setObjectives: (e: ObjectiveType[]) => void;
-  objectives: ObjectiveType[];
   objectiveForUpdate: ObjectiveType;
 }) {
+  const {objectives, setObjectives} = useContext(OkrContext)
   const [isWaitingForInsert, setIsWaitingForInsert] = useState<boolean>(false);
   const [isUpdateForm, setIsUpdateForm] = useState<boolean>(false);
   const [newObjective, setNewObjective] = useState<string>("");
@@ -64,6 +61,7 @@ export default function OKRForm({
     // inserting objectived into db.
     addOkrsDataToDB(objectiveToBeAdded)
       .then((data: ObjectiveType) => {
+        if(objectives === null) return;
         setObjectives([...objectives, data]);
         setKeyResults([defaultKeyResults]);
         setNewObjective("");
@@ -84,6 +82,7 @@ export default function OKRForm({
     };
 
     updateOkrsDataToDb(objectiveToBeUpdated, objectiveForUpdate.id).then((data)=>{
+      if(objectives === null) return;
       const updatedObjectives = objectives.map((objective)=>{
         return (objective.id === data.id) ? data : objective;
       })
