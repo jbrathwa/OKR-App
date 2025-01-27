@@ -8,10 +8,6 @@ const app = express();
 app.use(cors())
 app.use("/objectives", objectivesRouter);
 
-// app.get("/objectives", (req, res) => {
-//     objectiveController.fetchAll(res);
-// })
-
 app.listen(PORT, () => {
     console.log("Server running on port 3000");
 });
