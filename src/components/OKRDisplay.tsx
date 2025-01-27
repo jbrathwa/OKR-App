@@ -1,18 +1,20 @@
 import {useContext, useState} from "react";
 import {KeyResultModalType, ObjectiveType} from "../types/OKRTypes";
 import MetricsLabel from "./MetricLabel";
-import {FilePenLine, SquarePlus, Trash2} from "lucide-react";
+import {FilePenLine, LoaderCircle, SquarePlus, Trash2} from "lucide-react";
 import AddKeyResultModal from "./AddKeyResultModal";
 import {OkrContext} from "../context/OkrProvider";
 import * as React from "react";
 import {deleteOkrsDataFromDB} from "../database/OKRStore.ts";
 
 export default function OKRDisplay({
+                                       objectiveForUpdate,
                                        setObjectiveForUpdate
                                    }: {
+    objectiveForUpdate: ObjectiveType;
     setObjectiveForUpdate: React.Dispatch<React.SetStateAction<ObjectiveType>>
 }) {
-    const {objectives, setObjectives} = useContext(OkrContext)
+    const {objectives, setObjectives, isWaitingForResponse} = useContext(OkrContext)
 
     const [keyResultModal, setKeyResultModal] = useState<KeyResultModalType>({
         isOpen: false,
@@ -38,7 +40,11 @@ export default function OKRDisplay({
     async function deleteObjective(objectiveIdx: string, index: number) {
         if (objectives === null) return;
 
-        await deleteOkrsDataFromDB(objectiveIdx);
+        try {
+            await deleteOkrsDataFromDB(objectiveIdx);
+        } catch (error) {
+            alert(error);
+        }
         const updatedObjectives = objectives.filter((_, idx) => index !== idx);
         setObjectives(updatedObjectives);
     }
@@ -54,40 +60,46 @@ export default function OKRDisplay({
                     return (
                         <div
                             key={objectiveIdx}
-                            className="w-72 h-max border border-gray-200 rounded-md p-5 shadow"
+                            className="relative w-72 h-max border border-gray-200 rounded-md p-5 shadow"
                         >
-                            <div className="flex items-center justify-between">
-                                <h1 className="font-bold text-lg w-[180px] truncate mb-2">
-                                    {objective.objective}
-                                </h1>
-                                <div className="flex items-center gap-x-3 -mt-2">
-                                    <button
-                                        onClick={() => deleteObjective(objective.id, objectiveIdx)}
-                                        className="text-red-500"
-                                    >
-                                        <Trash2 className="w-4 h-4"/>
-                                    </button>
-                                    <button
-                                        onClick={() =>
-                                            setKeyResultModal({
-                                                isOpen: true,
-                                                objectiveIndex: objectiveIdx,
-                                            })
-                                        }
-                                        className="text-green-500"
-                                    >
-                                        <SquarePlus className="w-4 h-4"/>
-                                    </button>
-                                    <button onClick={() => {
-                                        setObjectiveForUpdate(objective)
-                                    }}>
-                                        <FilePenLine className="w-4 h-4 text-blue-500"/>
-                                    </button>
+                            {objective.id === objectiveForUpdate.id && isWaitingForResponse ?
+                                (<div className="w-full h-full absolute top-0 left-0 flex items-center justify-center bg-white z-10 bg-opacity-80 border-gray-200">
+                                    <LoaderCircle className="w-10 h-10 mr-1 animate-spin"/>
+                                </div>)
+                                : "" }
+                                <div className="flex items-center justify-between">
+                                    <h1 className="font-bold text-lg w-[180px] truncate mb-2">
+                                        {objective.objective}
+                                    </h1>
+                                    <div className="flex items-center gap-x-3 -mt-2">
+                                        <button
+                                            onClick={() => deleteObjective(objective.id, objectiveIdx)}
+                                            className="text-red-500"
+                                        >
+                                            <Trash2 className="w-4 h-4"/>
+                                        </button>
+                                        <button
+                                            onClick={() =>
+                                                setKeyResultModal({
+                                                    isOpen: true,
+                                                    objectiveIndex: objectiveIdx,
+                                                })
+                                            }
+                                            className="text-green-500"
+                                        >
+                                            <SquarePlus className="w-4 h-4"/>
+                                        </button>
+                                        <button onClick={() => {
+                                            setObjectiveForUpdate(objective)
+                                        }}>
+                                            <FilePenLine className="w-4 h-4 text-blue-500"/>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+
                             {objective.keyResults.length > 0 ? (
                                 objective.keyResults.map((elem, index) => (
-                                    <div key={index} className="relative pt-2 bg-gray-100 p-3 mt-2 rounded-md">
+                                    <div key={index} className="relative pt-2 bg-gray-100 p-3 mt-3 rounded-md">
                                         <button
                                             onClick={() => deleteKeyResult(objectiveIdx, index)}
                                             className="bg-red-500 text-white absolute top-1/2 -translate-y-1/2 -right-10 shadow-lg hover:shadow-inner rounded-full p-2"

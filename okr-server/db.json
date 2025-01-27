@@ -1,44 +1,31 @@
 {
   "objectives": [
     {
-      "id": "1",
-      "objective": "Build a software team",
+      "objective": "sadasd",
       "keyResults": [
         {
-          "title": "Get 5 Frontend engineers",
+          "title": "sadasd",
           "initialValue": 0,
-          "currentValue": 2,
-          "targetValue": 5,
-          "metrics": "engineers"
+          "currentValue": 0,
+          "targetValue": 0,
+          "metrics": ""
         },
         {
-          "title": "Get 5 Backend engineers",
-          "initialValue": 0,
-          "currentValue": 1,
-          "targetValue": 5,
-          "metrics": "engineers"
-        }
-      ]
-    },
-    {
-      "objective": "dvgf",
-      "keyResults": [
-        {
-          "title": "",
+          "title": "sdasdads",
           "initialValue": 0,
           "currentValue": 0,
           "targetValue": 0,
           "metrics": ""
         }
       ],
-      "id": "0e38"
+      "id": "aefd"
     },
     {
-      "id": "4381",
-      "objective": "sdasd",
+      "id": "598b",
+      "objective": "dddd",
       "keyResults": [
         {
-          "title": "asdsdsadsadsdsdsadsadsadsadddds",
+          "title": "d",
           "initialValue": 0,
           "currentValue": 0,
           "targetValue": 0,

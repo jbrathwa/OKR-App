@@ -42,6 +42,7 @@ function App() {
         </p>
       ) : (
         <OKRDisplay
+            objectiveForUpdate={objectiveForUpdate}
           setObjectiveForUpdate={setObjectiveForUpdate}
         />
       )}

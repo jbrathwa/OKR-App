@@ -1,9 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import Input from "./Input";
-import {
-  KeyResultType,
-  ObjectiveType,
-} from "../types/OKRTypes";
+import { KeyResultType, ObjectiveType } from "../types/OKRTypes";
 import { addOkrsDataToDB, updateOkrsDataToDb } from "../database/OKRStore";
 import { LoaderCircle } from "lucide-react";
 import { OkrContext } from "../context/OkrProvider";
@@ -21,8 +18,12 @@ export default function OKRForm({
 }: {
   objectiveForUpdate: ObjectiveType;
 }) {
-  const {objectives, setObjectives} = useContext(OkrContext)
-  const [isWaitingForInsert, setIsWaitingForInsert] = useState<boolean>(false);
+  const {
+    objectives,
+    setObjectives,
+    isWaitingForResponse,
+    setIsWaitingForResponse,
+  } = useContext(OkrContext);
   const [isUpdateForm, setIsUpdateForm] = useState<boolean>(false);
   const [newObjective, setNewObjective] = useState<string>("");
   const [keyResults, setKeyResults] = useState<KeyResultType[]>([
@@ -52,7 +53,7 @@ export default function OKRForm({
     }
 
     // set loader true
-    setIsWaitingForInsert(true);
+    setIsWaitingForResponse(true);
     const objectiveToBeAdded = {
       objective: newObjective,
       keyResults: keyResults,
@@ -61,11 +62,11 @@ export default function OKRForm({
     // inserting objectived into db.
     addOkrsDataToDB(objectiveToBeAdded)
       .then((data: ObjectiveType) => {
-        if(objectives === null) return;
+        if (objectives === null) return;
         setObjectives([...objectives, data]);
         setKeyResults([defaultKeyResults]);
         setNewObjective("");
-        setIsWaitingForInsert(false);
+        setIsWaitingForResponse(false);
         console.log(objectives);
       })
       .catch((error) => {
@@ -73,28 +74,31 @@ export default function OKRForm({
       });
   }
 
-  function handleUpdateObjective(){
-    setIsWaitingForInsert(true);
+  function handleUpdateObjective() {
+    setIsWaitingForResponse(true);
 
     const objectiveToBeUpdated = {
       objective: newObjective,
       keyResults: keyResults,
     };
 
-    updateOkrsDataToDb(objectiveToBeUpdated, objectiveForUpdate.id).then((data)=>{
-      if(objectives === null) return;
-      const updatedObjectives = objectives.map((objective)=>{
-        return (objective.id === data.id) ? data : objective;
-      })
-      setObjectives([...updatedObjectives]);
+    updateOkrsDataToDb(objectiveToBeUpdated, objectiveForUpdate.id).then(
+      (data) => {
+        if (objectives === null) return;
+        const updatedObjectives = objectives.map((objective) => {
+          return objective.id === data.id ? data : objective;
+        });
+        setObjectives([...updatedObjectives]);
 
-      // Reset
-      setNewObjective("");
-      setKeyResults([defaultKeyResults]);
-      setIsUpdateForm(false);
-      setIsWaitingForInsert(false);
-    })
-
+        // Reset
+        setNewObjective("");
+        setKeyResults([defaultKeyResults]);
+        setTimeout(() => {
+          setIsUpdateForm(false);
+          setIsWaitingForResponse(false);
+        }, 3000);
+      }
+    );
   }
 
   function addNewKeyResults() {
@@ -201,7 +205,7 @@ export default function OKRForm({
           onClick={isUpdateForm ? handleUpdateObjective : addNewObjective}
           className="bg-green-400 hover:bg-green-500 px-4 py-2 rounded-md text-white text-sm font-medium flex items-center"
         >
-          {isWaitingForInsert && (
+          {isWaitingForResponse && (
             <LoaderCircle className="w-4 h-4 mr-1 animate-spin" />
           )}{" "}
           {isUpdateForm ? "Update Objective" : `Add Objective`}
