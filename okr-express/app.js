@@ -17,18 +17,7 @@ let mockObjective = {
     ]
 }
 
-let dummyData = {
-    firstName: faker.person.firstName(),
-    lastName: faker.person.lastName(),
-    bio: faker.person.bio(),
-    age: faker.number.int({
-        min: 1,
-        max: 100,
-    }),
-}
-
 app.get("/", (req, res) => {
-    console.log(dummyData);
     res.json(mockObjective);
 })
 
