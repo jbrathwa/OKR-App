@@ -1,3 +1,3 @@
 export class RequestDTO {
-  title: string;
+  objective: string;
 }
