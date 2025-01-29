@@ -26,7 +26,9 @@ export default tseslint.config(
     },
   },
   {
+    extends: ["eslint:recommended", "plugin:prettier/recommended"],
     rules: {
+      "prettier/prettier": ["error", { "endOfLine": "auto" }],
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'warn'
