@@ -16,7 +16,15 @@ export class ObjectivesService {
         });
     }
 
-    async create(okrs) {
+    async create(okrs: { objective: string }) {
         return await this.prismaService.objectives.create({data: okrs});
+    }
+
+    async deleteObjective(objectiveId: string) {
+        try {
+            return await this.prismaService.objectives.delete({where: {id: objectiveId}});
+        } catch (error) {
+            return error;
+        }
     }
 }

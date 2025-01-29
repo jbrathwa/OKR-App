@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Post} from '@nestjs/common';
 import {ObjectivesService} from "./objectives.service";
 import {RequestDTO} from "./RequestDTO";
 
@@ -16,4 +16,11 @@ export class ObjectivesController {
     create(@Body() okrs: RequestDTO) {
         return this.objectivesService.create(okrs);
     }
+
+    @Delete("/")
+    delete(@Body('objectiveId') objectiveId: string) {
+        return this.objectivesService.deleteObjective(objectiveId);
+    }
+
+
 }
