@@ -20,7 +20,7 @@ export class ObjectivesService {
         return await this.prismaService.objectives.create({data: okrs});
     }
 
-    async deleteObjective(objectiveId: string) {
+    async delete(objectiveId: string) {
         try {
             return await this.prismaService.objectives.delete({where: {id: objectiveId}});
         } catch (error) {

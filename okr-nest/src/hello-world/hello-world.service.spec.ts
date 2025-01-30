@@ -13,6 +13,7 @@ describe('HelloWorldService', () => {
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    const response = service.show();
+    expect(response).toBe("Hello World!");
   });
 });
