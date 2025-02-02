@@ -22,12 +22,14 @@ describe('ObjectivesController', () => {
         controller = module.get<ObjectivesController>(ObjectivesController);
     });
 
-    it('should be defined', () => {
-        expect(controller).toBeDefined();
-        expect(mockedService).toBeDefined();
-    });
+    describe('Initial', () => {
+        it('Should be defined', () => {
+            expect(controller).toBeDefined();
+            expect(mockedService).toBeDefined();
+        });
+    })
 
-    describe("fetchAll Objectives", () => {
+    describe("fetchAll()", () => {
         let objective = {
             id: "1001",
             objective: "Objective 1",
@@ -44,13 +46,13 @@ describe('ObjectivesController', () => {
             ]
         };
 
-        it('should call fetchAll method of service by controller', async () => {
+        it('Should be called fetchAll() of service by controller', async () => {
             await controller.fetchAll();
 
             expect(mockedService.fetchAll).toHaveBeenCalled();
         });
 
-        it("should return a list of Objectives", async () => {
+        it("Should return all objectives", async () => {
             mockedService.fetchAll.mockResolvedValue([objective]);
 
             const response = await controller.fetchAll();
@@ -59,14 +61,14 @@ describe('ObjectivesController', () => {
         })
     });
 
-    describe("Create Objectives", () => {
-        it('should call create method of service by controller', async () => {
+    describe("create()", () => {
+        it('Should be called create() of service by controller', async () => {
             await controller.create(objective);
 
             expect(mockedService.create).toHaveBeenCalled();
         });
 
-        it("should create objective", async () => {
+        it("Should create objective", async () => {
             mockedService.create.mockResolvedValue({...objective, id: "1001"});
 
             const response = await controller.create(objective);
@@ -75,14 +77,14 @@ describe('ObjectivesController', () => {
         })
     })
 
-    describe("Delete Objectives", () => {
-        it('should call delete method of service by controller', async () => {
+    describe("delete()", () => {
+        it('Should be called delete() of service by controller', async () => {
             await controller.delete("1001");
 
             expect(mockedService.create).toHaveBeenCalled();
         });
 
-        it("should delete objective", async () => {
+        it("Should delete objective", async () => {
             mockedService.delete.mockResolvedValue({...objective, id: "1001"});
 
             const response = await controller.delete("1001");

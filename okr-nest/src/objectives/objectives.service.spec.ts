@@ -6,7 +6,7 @@ import {mockDeep} from "jest-mock-extended";
 describe('ObjectivesService', () => {
     let service: ObjectivesService;
     let mockPrismaService = mockDeep<PrismaService>();
-    let objective = {
+    let objectiveResponse = {
         objective: "Objective 1",
         keyResults: [
             {
@@ -35,15 +35,21 @@ describe('ObjectivesService', () => {
     });
 
     describe("Initial", () => {
-        it('should be defined', () => {
+        it('Should be defined', () => {
             expect(service).toBeDefined();
             expect(mockPrismaService).toBeDefined();
         });
     })
 
-    describe("fetchAll Objective", () => {
-        it("should return all objectives", async () => {
-            let mockResponse = {id: "1000", ...objective};
+    describe("fetchAll()", () => {
+        it('Should be called findMany() of PrismaService by ObjectiveService', async () => {
+            await service.fetchAll();
+
+            expect(mockPrismaService.objectives.findMany).toHaveBeenCalled();
+        });
+
+        it("Should return all objectives", async () => {
+            let mockResponse = {id: "1000", ...objectiveResponse};
 
             mockPrismaService.objectives.findMany.mockResolvedValue([mockResponse]);
 
@@ -54,26 +60,41 @@ describe('ObjectivesService', () => {
         })
     })
 
-    describe("Create Objective", () => {
-        it("should create objective", async () => {
-            let mockResponse = {id: "1001", objective: "Objective 1"};
+    describe("create()", () => {
+        let objectiveToBeCreated = {objective: "Objective 1"};
+
+        it('Should be called create() of PrismaService by ObjectiveService', async () => {
+            await service.create(objectiveToBeCreated);
+
+            expect(mockPrismaService.objectives.create).toHaveBeenCalled();
+        });
+
+        it("Should create objective", async () => {
+            let mockResponse = {id: "1001", ...objectiveToBeCreated};
 
             mockPrismaService.objectives.create.mockResolvedValue(mockResponse);
 
-            const response = await service.create({objective: "Objective 1"});
+            const response = await service.create(objectiveToBeCreated);
 
             expect(response).toBeDefined();
             expect(response).toEqual(mockResponse);
         })
     })
 
-    describe("Delete Objective", () => {
-        it('should delete objective', async () => {
-            let mockResponse = {id: "1001", ...objective};
+    describe("delete()", () => {
+        let objectiveId: string = "1001";
+        it('Should be called delete() of PrismaService by ObjectiveService', async () => {
+            await service.delete(objectiveId);
+
+            expect(mockPrismaService.objectives.delete).toHaveBeenCalled();
+        })
+
+        it('Should delete objective and return deleted objective', async () => {
+            let mockResponse = {id: objectiveId, ...objectiveResponse};
 
             mockPrismaService.objectives.delete.mockResolvedValue(mockResponse);
 
-            const response = await service.delete("1001");
+            const response = await service.delete(objectiveId);
 
             expect(response).toBeDefined();
             expect(response).toEqual(mockResponse);
