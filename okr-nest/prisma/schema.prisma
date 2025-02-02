@@ -27,5 +27,5 @@ model KeyResults {
   currentValue Int
   targetValue Int
   metric String
-  objective Objectives @relation(fields: [objectiveId], references: [id])
+  objective Objectives @relation(fields: [objectiveId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
