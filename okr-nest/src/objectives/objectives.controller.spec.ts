@@ -92,4 +92,23 @@ describe('ObjectivesController', () => {
             expect(response).toEqual({...objective, id: "1001"});
         })
     })
+
+    describe("patch()", ()=>{
+        it('Should be called patch() of service by controller', async () => {
+            await controller.patch({id: "1001", objective: "objective 1"});
+
+            expect(mockedService.patch).toHaveBeenCalled();
+        });
+
+        it("Should update objective", async () => {
+            const oldObjective = {id: "1001", objective: "title 0"};
+            const newObjective = {id: "1001", objective: "title 1"};
+
+            mockedService.patch.mockResolvedValue(newObjective);
+
+            const response = await controller.patch(oldObjective);
+
+            expect(response).toEqual(newObjective);
+        })
+    })
 });

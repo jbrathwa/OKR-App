@@ -100,4 +100,23 @@ describe('ObjectivesService', () => {
             expect(response).toEqual(mockResponse);
         });
     })
+
+    describe("patch()", ()=>{
+        it('Should be called patch() of PrismaService by ObjectiveService', async () => {
+            await service.patch({id: "1001", objective: "objective 1"});
+
+            expect(mockPrismaService.objectives.update).toHaveBeenCalled();
+        });
+
+        it("Should update objective", async () => {
+            const oldObjective = {id: "1001", objective: "title 0"};
+            const newObjective = {id: "1001", objective: "title 1"};
+
+            mockPrismaService.objectives.update.mockResolvedValue(newObjective);
+
+            const response = await service.patch(oldObjective);
+
+            expect(response).toEqual(newObjective);
+        })
+    })
 });
