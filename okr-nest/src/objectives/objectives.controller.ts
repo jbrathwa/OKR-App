@@ -14,7 +14,6 @@ export class ObjectivesController {
 
     @Post("/")
     create(@Body() okrs: ObjectiveReqDTO) {
-        console.log(okrs);
         return this.objectivesService.create(okrs);
     }
 

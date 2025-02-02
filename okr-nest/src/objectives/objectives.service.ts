@@ -15,7 +15,6 @@ export class ObjectivesService {
     }
 
     async create(okrs: { objective: string }) {
-        console.log(okrs);
         return await this.prismaService.objectives.create({
             data: okrs
         });

@@ -10,7 +10,7 @@ export class objectivesService{
                 initialValue: faker.number.int({min: 0, max: 0}),
                 currentValue: faker.number.int({min: 0, max: 10}),
                 targetValue: faker.number.int({min: 10, max: 10}),
-                metrics: faker.company.buzzNoun(),
+                metric: faker.company.buzzNoun(),
             }
         ]
     }]
