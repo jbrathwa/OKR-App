@@ -95,4 +95,36 @@ describe("KeyResultService", () => {
             expect(response).toEqual(mockedResponse);
         })
     })
+
+    describe("patch()", ()=>{
+        let oldKeyResult: KeyResultResDTO = {
+            ...keyResult,
+            id: "1001"
+        }
+
+        let newKeyResult: KeyResultResDTO = {
+            id: "1001",
+            title: "Hire frontend developer",
+            initialValue: 0,
+            currentValue: 0,
+            targetValue: 0,
+            metric: "%",
+            objectiveId: "1"
+        }
+
+        it("Should be called patch() of PrismaService", async () => {
+            await keyResultsService.patch({...keyResult, id: "1001"});
+
+            expect(mockPrismaService.keyResults.update).toHaveBeenCalled();
+        })
+
+        it("Should update key result", async () => {
+            mockPrismaService.keyResults.update.mockResolvedValue(newKeyResult);
+
+            const response = await keyResultsService.patch(oldKeyResult);
+
+            expect(response).toBeDefined();
+            expect(response).toEqual(newKeyResult);
+        })
+    })
 })

@@ -1,6 +1,6 @@
-import {Body, Controller, Delete, Get, Post, Query} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Patch, Post, Query} from '@nestjs/common';
 import {KeyResultsService} from "./key-results.service";
-import {KeyResultReqDTO} from "./keyResultDTO";
+import {KeyResultReqDTO, KeyResultResDTO} from "./keyResultDTO";
 
 
 @Controller('key-results')
@@ -16,12 +16,16 @@ export class KeyResultsController {
 
     @Post("/")
     create(@Body() keyResults: KeyResultReqDTO[]) {
-        console.log({keyResults})
         return this.keyResultsService.create(keyResults);
     }
 
     @Delete('/')
     delete(@Body('id') id: string) {
         return this.keyResultsService.delete(id);
+    }
+
+    @Patch("/")
+    patch(@Body() keyResults: KeyResultResDTO) {
+        return this.keyResultsService.patch(keyResults);
     }
 }

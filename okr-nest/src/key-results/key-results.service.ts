@@ -1,6 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import {PrismaService} from "../prisma/prisma.service";
-import {KeyResultReqDTO} from "./keyResultDTO";
+import {KeyResultReqDTO, KeyResultResDTO,} from "./keyResultDTO";
 
 @Injectable()
 export class KeyResultsService {
@@ -25,5 +25,20 @@ export class KeyResultsService {
                 id: keyResultId
             }
         }); // return the deleted keyResult
+    }
+
+    patch(keyResults: KeyResultResDTO){
+        return this.prismaService.keyResults.update({
+            where: {
+                id: keyResults.id
+            },
+            data: {
+                title: keyResults.title,
+                initialValue: keyResults.initialValue,
+                targetValue: keyResults.targetValue,
+                currentValue: keyResults.currentValue,
+                metric: keyResults.metric,
+            }
+        })
     }
 }
