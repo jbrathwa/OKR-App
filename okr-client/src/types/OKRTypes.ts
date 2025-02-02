@@ -1,10 +1,13 @@
 type KeyResultType = {
+  id: string;
   title: string;
   initialValue: number;
   currentValue: number;
   targetValue: number;
-  metrics: string;
+  metric: string;
 };
+
+type InsertKeyResultType = Omit<KeyResultType, "id">;
 
 type ObjectiveType = {
   id: string;
@@ -24,4 +27,5 @@ export type {
   ObjectiveType,
   KeyResultModalType,
   InsertObjectiveType,
+  InsertKeyResultType
 };

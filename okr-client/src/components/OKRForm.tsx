@@ -6,11 +6,12 @@ import { LoaderCircle } from "lucide-react";
 import { OkrContext } from "../context/OkrProvider";
 
 const defaultKeyResults = {
+  id: "",
   title: "",
   initialValue: 0,
   currentValue: 0,
   targetValue: 0,
-  metrics: "",
+  metric: "",
 };
 
 export default function OKRForm({
@@ -172,7 +173,7 @@ export default function OKRForm({
               />
               <Input
                 type="text"
-                value={keyResult.metrics}
+                value={keyResult.metric}
                 placeholder="Metrics Value"
                 onChange={(e) => {
                   handleChange("metrics", e.target.value, index);

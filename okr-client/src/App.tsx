@@ -14,11 +14,12 @@ function App() {
     objective: "",
     keyResults: [
       {
+        id: "",
         title: "",
         initialValue: 0,
         currentValue: 0,
         targetValue: 0,
-        metrics: "",
+        metric: "",
       },
     ],
   });
