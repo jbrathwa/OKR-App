@@ -113,7 +113,7 @@ export default function OKRDisplay({
 
                             {objective.keyResults && objective.keyResults.length > 0 ? (
                                 objective.keyResults.map((keyResult, index) => (
-                                    <div key={index} className="relative pt-2 bg-gray-100 p-3 mt-3 rounded-md">
+                                    <div key={index} className="relative pt-2 bg-gray-100 shadow p-3 mt-3 rounded-md">
                                         <button
                                             onClick={() => deleteKeyResult(objectiveIdx, index, keyResult.id)}
                                             className="bg-red-500 text-white absolute top-1/2 -translate-y-1/2 -right-10 shadow-lg hover:shadow-inner rounded-full p-2"
