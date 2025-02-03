@@ -45,7 +45,7 @@ export default function AddKeyResultModal({
             });
             setObjectives(updatedObjectives);
         }).catch((error) => {
-            console.log(error)
+            alert(error);
         })
         closeModal();
     }
