@@ -68,10 +68,9 @@ export default function OKRForm({
         setKeyResults([defaultKeyResults]);
         setNewObjective("");
         setIsWaitingForResponse(false);
-        console.log(objectives);
       })
       .catch((error) => {
-        console.log(error);
+        alert(error)
       });
   }
 
