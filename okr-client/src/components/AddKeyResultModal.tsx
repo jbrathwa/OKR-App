@@ -8,7 +8,7 @@ import {CircleX} from "lucide-react";
 import {OkrContext} from "../context/OkrProvider";
 import {addKeyResultToObjective} from "../database/OKRStore.ts";
 
-const defaultKeyResults:InsertKeyResultType = {
+const defaultKeyResults: InsertKeyResultType = {
     title: "",
     initialValue: 0,
     currentValue: 0,
@@ -44,10 +44,10 @@ export default function AddKeyResultModal({
                 return idx === keyResultModal.objectiveIndex ? foundObj : objective;
             });
             setObjectives(updatedObjectives);
-            closeModal();
         }).catch((error) => {
             console.log(error)
         })
+        closeModal();
     }
 
     function handleChange(key: string, value: number | string) {
