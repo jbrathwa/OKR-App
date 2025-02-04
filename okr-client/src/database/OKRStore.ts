@@ -1,4 +1,4 @@
-import {InsertKeyResultType, InsertObjectiveType, KeyResultType, ObjectiveType} from "../types/OKRTypes";
+import {InsertKeyResultType, KeyResultType, ObjectiveType} from "../types/OKRTypes";
 
 const HTTP_RESPONSE_STATUS = {
     NOT_FOUND: 404,
@@ -9,10 +9,10 @@ async function getOkrsData(): Promise<ObjectiveType[]> {
     return await response.json();
 }
 
-async function addOkrsDataToDB(okr: InsertObjectiveType): Promise<ObjectiveType> {
+async function addOkrsDataToDB(objective: { objective: string }): Promise<ObjectiveType> {
     const response = await fetch("http://localhost:3000/objectives", {
         method: "POST",
-        body: JSON.stringify({objective: okr.objective}),
+        body: JSON.stringify(objective),
         headers: {
             "Content-Type": "application/json",
         }
@@ -21,7 +21,7 @@ async function addOkrsDataToDB(okr: InsertObjectiveType): Promise<ObjectiveType>
     return await response.json();
 }
 
-async function updateOkrsDataToDb(objectiveTobeUpdated: InsertObjectiveType, okrId: string): Promise<ObjectiveType> {
+async function updateOkrsDataToDb(objectiveTobeUpdated: { objective: string }, okrId: string): Promise<ObjectiveType> {
     const response = await fetch(`http://localhost:3000/objectives/${okrId}`, {
         method: "PUT",
         body: JSON.stringify(objectiveTobeUpdated),
@@ -57,10 +57,13 @@ async function deleteKeyResultOfObjective(keyResultId: string): Promise<KeyResul
     return await response.json();
 }
 
-async function addKeyResultToObjective(keyResult: InsertKeyResultType, objectiveId: string): Promise<KeyResultType & {id: string, objectiveId: string}> {
+async function addKeyResultToObjective(keyResult: InsertKeyResultType[], objectiveId: string): Promise<KeyResultType & {id: string, objectiveId: string}> {
+    const keyResultToBeInserted = keyResult.map((keyResult)=>{
+        return {...keyResult, objectiveId: objectiveId};
+    })
     const response = await fetch(`http://localhost:3000/key-results`, {
         method: "POST",
-        body: JSON.stringify([{...keyResult, objectiveId: objectiveId}]),
+        body: JSON.stringify(keyResultToBeInserted),
         headers: {
             "Content-Type": "application/json",
         }
