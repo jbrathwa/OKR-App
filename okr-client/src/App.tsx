@@ -20,6 +20,7 @@ function App() {
         currentValue: 0,
         targetValue: 0,
         metric: "",
+        objectiveId: "",
       },
     ],
   });

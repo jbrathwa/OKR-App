@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState} from "react";
 import Input from "./Input";
-import {InsertKeyResultType, ObjectiveType} from "../types/OKRTypes";
+import {KeyResultType, ObjectiveType} from "../types/OKRTypes";
 import {addKeyResultToObjective, addOkrsDataToDB, updateOkrsDataToDb} from "../database/OKRStore";
 import {LoaderCircle} from "lucide-react";
 import {OkrContext} from "../context/OkrProvider";
@@ -26,7 +26,7 @@ export default function OKRForm({
     } = useContext(OkrContext);
     const [isUpdateForm, setIsUpdateForm] = useState<boolean>(false);
     const [newObjective, setNewObjective] = useState<string>("");
-    const [keyResults, setKeyResults] = useState<InsertKeyResultType[]>([
+    const [keyResults, setKeyResults] = useState<KeyResultType[]>([
         defaultKeyResults,
     ]);
 
@@ -56,23 +56,23 @@ export default function OKRForm({
         setIsWaitingForResponse(true);
         const objectiveToBeAdded = {objective: newObjective};
 
-        // inserting objectived into db.
+        // inserting objective into db.
         addOkrsDataToDB(objectiveToBeAdded)
             .then((objectiveResponse: ObjectiveType) => {
                 if (objectives === null) return;
                 console.log(keyResults);
                 if (keyResults[0].title != "") {
                     addKeyResultToObjective(keyResults, objectiveResponse.id).then((keyResultsResponse) => {
-                        setKeyResults([keyResultsResponse]);
-                        const objectiveToBeAddedToState = {...objectiveResponse, keyResults: [keyResultsResponse],};
+                        const objectiveToBeAddedToState = {...objectiveResponse, keyResults: keyResultsResponse};
+                        console.warn(objectiveToBeAddedToState);
+
                         setObjectives([...objectives, objectiveToBeAddedToState]);
                     })
                 } else {
-                    setKeyResults([defaultKeyResults]);
                     setObjectives([...objectives, objectiveResponse]);
                 }
 
-
+                setKeyResults([defaultKeyResults]);
                 setNewObjective("");
                 setIsWaitingForResponse(false);
             })

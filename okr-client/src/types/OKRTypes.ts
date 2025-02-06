@@ -1,5 +1,4 @@
 type KeyResultType = {
-  id: string;
   title: string;
   initialValue: number;
   currentValue: number;
@@ -9,10 +8,12 @@ type KeyResultType = {
 
 type InsertKeyResultType = Omit<KeyResultType, "id">;
 
+type KeyResultToBeRead = KeyResultType & {objectiveId: string, id: string};
+
 type ObjectiveType = {
   id: string;
   objective: string;
-  keyResults: KeyResultType[];
+  keyResults: KeyResultToBeRead[];
 };
 
 type KeyResultModalType = {

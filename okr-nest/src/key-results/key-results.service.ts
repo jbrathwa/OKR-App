@@ -16,7 +16,7 @@ export class KeyResultsService {
 
     create(keyResults: KeyResultReqDTO[]) {
         if (keyResults.length == 0) return undefined;
-        return this.prismaService.keyResults.createMany({data: keyResults}); // return the {count: no_of_inserted_record}
+        return this.prismaService.keyResults.createManyAndReturn({data: keyResults});
     }
 
     delete(keyResultId: string) {

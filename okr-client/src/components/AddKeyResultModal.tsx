@@ -37,8 +37,8 @@ export default function AddKeyResultModal({
         );
 
         if (foundObj === undefined) return;
-        addKeyResultToObjective(keyResult, foundObj.id).then((data) => {
-            foundObj.keyResults.push({...keyResult, id: data.id});
+        addKeyResultToObjective([keyResult], foundObj.id).then((data) => {
+            foundObj.keyResults.push({...keyResult, id: data[0].id, objectiveId: data[0].objectiveId});
 
             const updatedObjectives = objectives.map((objective, idx) => {
                 return idx === keyResultModal.objectiveIndex ? foundObj : objective;
