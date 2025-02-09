@@ -120,7 +120,7 @@ export default function OKRDisplay({
                                         }
                                         <button
                                             onClick={() => deleteKeyResult(objectiveIdx, index, keyResult.id)}
-                                            className="bg-red-500 text-white absolute top-1/2 -translate-y-1/2 -right-10 shadow-lg hover:shadow-inner rounded-full p-2"
+                                            className="border bg-red-500 text-white hover:text-red-500 hover:bg-white hover:border-red-500 absolute top-1/2 -translate-y-1/2 -right-10 shadow-lg hover:shadow-inner rounded-full p-2"
                                         >
                                             <Trash2 className="w-4 h-4"/>
                                         </button>

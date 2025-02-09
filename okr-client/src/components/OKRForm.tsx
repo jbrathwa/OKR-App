@@ -7,7 +7,7 @@ import {
     generateKeyResultFromLLM,
     updateOkrsDataToDb
 } from "../database/OKRStore";
-import {BetweenHorizonalStart, Goal, LoaderCircle, Sparkles} from "lucide-react";
+import {BetweenHorizonalStart, Goal, LoaderCircle, Sparkles, Trash2} from "lucide-react";
 import {OkrContext} from "../context/OkrProvider";
 
 const defaultKeyResults = {
@@ -143,22 +143,28 @@ export default function OKRForm({
         setKeyResults((prev) => [...prev, defaultKeyResults]);
     }
 
+    function deleteKeyResultInputList(selectedInptListMapIndex: number) {
+        const updatedKeyResultInptList = keyResults.filter((_m, index) => {
+            return index !== selectedInptListMapIndex;
+        })
+
+        setKeyResults(updatedKeyResultInptList);
+    }
+
     return (
         <div
             id="addObjective"
             className="w-2/5 h-[90%] overflow-y-scroll space-y-4 rounded-md bg-gray-50 border-1 shadow-md"
         >
-            <div className="sticky top-0 bg-gray-50 space-y-3 px-8 py-4">
+            <div className="sticky top-0 bg-gray-50 space-y-8 px-8 py-4 z-10">
                 <h1 className="font-medium text-lg mt-2 text-center">
                     <span className="text-primary">Goal</span>Sync - <span
                     className="text-secondary">OKR Application</span>
                 </h1>
 
-                <div id="objectForm" className="w-full flex flex-col space-y-2">
-                    <label className="font-medium" htmlFor="">
-                        Objective
-                    </label>
+                <div id="objectForm" className="w-full">
                     <Input
+                        label={"Objective"}
                         type="text"
                         placeholder="Enter a objective"
                         className="flex-grow"
@@ -170,84 +176,92 @@ export default function OKRForm({
                 </div>
             </div>
             <hr/>
-            {
-                keyResults && keyResults.length > 0 &&
-                <div
-                    className="w-full flex flex-col space-y-4 px-8 py-4"
-                    id="keyResultForm"
-                >
-                    <div className="w-full flex justify-between items-center">
-                        <h2 className="font-medium">
-                            Key Results
-                        </h2>
-                        <button
-                            onClick={() => handleGenerateKeyResultFromLLM()}
-                            className="bg-white border-2 border-[#12a6a7] hover:border-gray-700 hover:bg-gray-700 hover:text-white text-primary ease-linear flex items-center gap-x-1.5 px-4 py-2 rounded-md text-sm font-medium"
-                        >
-                            <Sparkles
-                                className={`w-4 h-4 -rotate-45 ${isGenerating ? "animate-ping" : ""}`}/> Generate
-                        </button>
-                    </div>
-                    {keyResults && keyResults.map((keyResult, index) => (
+            <div
+                className="w-full flex flex-col space-y-4 px-8 py-4"
+                id="keyResultForm"
+            >
+                <div className="w-full flex justify-between items-center">
+                    <h2 className="font-medium">
+                        Your Objective's Key Results
+                    </h2>
+                    <button
+                        onClick={() => handleGenerateKeyResultFromLLM()}
+                        className="bg-white border-2 border-[#12a6a7] hover:border-gray-700 hover:bg-gray-700 hover:text-white text-primary ease-linear flex items-center gap-x-1.5 px-4 py-2 rounded-md text-sm font-medium"
+                    >
+                        <Sparkles
+                            className={`w-4 h-4 -rotate-45 ${isGenerating ? "animate-ping" : ""}`}/> Generate
+                    </button>
+                </div>
+                {keyResults && keyResults.length > 0 && keyResults.map((keyResult, index) => (
+                    <div
+                        key={index}
+                        id="firstKeyResult"
+                        className="flex flex-col space-y-2"
+                    >
+                        <Input
+                            label={"Title"}
+                            className="flex-grow"
+                            value={keyResult.title}
+                            type="text"
+                            placeholder="Enter a specific key-results of defined objective"
+                            onChange={(e) => {
+                                handleChange("title", e.target.value, index);
+                            }}
+                        />
                         <div
-                            key={index}
-                            id="firstKeyResult"
-                            className="flex flex-col space-y-2"
+                            id="firstKeyResultMetrics"
+                            className="flex justify-between flex-wrap gap-y-2 relative"
                         >
+                            <button
+                                onClick={() => deleteKeyResultInputList(index)}
+                                className="bg-white border border-red-500 text-red-500 hover:bg-red-500 hover:text-white absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 shadow-lg hover:shadow-inner rounded-full p-2"
+                            >
+                                <Trash2 className="w-4 h-4"/>
+                            </button>
                             <Input
-                                className="flex-grow"
-                                value={keyResult.title}
-                                type="text"
-                                placeholder="Enter a specific key-results of defined objective"
+                                label={"Initial Value"}
+                                value={keyResult.initialValue}
+                                type="number"
+                                placeholder="Initial Value"
                                 onChange={(e) => {
-                                    handleChange("title", e.target.value, index);
+                                    handleChange("initialValue", parseInt(e.target.value), index);
                                 }}
                             />
-                            <div
-                                id="firstKeyResultMetrics"
-                                className="flex justify-between flex-wrap gap-y-2"
-                            >
-                                <Input
-                                    value={keyResult.initialValue}
-                                    type="number"
-                                    placeholder="Initial Value"
-                                    onChange={(e) => {
-                                        handleChange("initialValue", parseInt(e.target.value), index);
-                                    }}
-                                />
-                                <Input
-                                    type="number"
-                                    value={keyResult.currentValue}
-                                    placeholder="Current Value"
-                                    onChange={(e) => {
-                                        handleChange("currentValue", parseInt(e.target.value), index);
-                                    }}
-                                />
-                                <Input
-                                    type="text"
-                                    value={keyResult.metric}
-                                    placeholder="Metrics Value"
-                                    onChange={(e) => {
-                                        handleChange("metric", e.target.value, index);
-                                    }}
-                                />
-                                <Input
-                                    type="number"
-                                    value={keyResult.targetValue}
-                                    placeholder="Target Value"
-                                    onChange={(e) => {
-                                        handleChange("targetValue", parseInt(e.target.value), index);
-                                    }}
-                                />
-                            </div>
+                            <Input
+                                label={"Current Value"}
+                                type="number"
+                                value={keyResult.currentValue}
+                                placeholder="Current Value"
+                                onChange={(e) => {
+                                    handleChange("currentValue", parseInt(e.target.value), index);
+                                }}
+                            />
+                            <Input
+                                label={"Metric"}
+                                type="text"
+                                value={keyResult.metric}
+                                placeholder="Metrics Value"
+                                onChange={(e) => {
+                                    handleChange("metric", e.target.value, index);
+                                }}
+                            />
+                            <Input
+                                label={"Target Value"}
+                                type="number"
+                                value={keyResult.targetValue}
+                                placeholder="Target Value"
+                                onChange={(e) => {
+                                    handleChange("targetValue", parseInt(e.target.value), index);
+                                }}
+                            />
                         </div>
-                    ))}
-                </div>
-            }
+                    </div>
+                ))}
+            </div>
 
             <div
                 id="submitButton"
-                className="flex justify-between sticky bottom-0 bg-gray-50 px-8 py-5"
+                className="w-full flex justify-between sticky bottom-0 bg-gray-50 px-8 py-5"
             >
                 {isUpdateForm ? <button
                         className="bg-secondary hover:bg-gray-800 ease-linear px-4 py-2 rounded-md text-white text-sm font-medium"

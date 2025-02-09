@@ -71,6 +71,7 @@ export default function AddKeyResultModal({
                     </button>
                 </div>
                 <Input
+                    label={"Title"}
                     value={keyResult.title}
                     className="flex-grow"
                     type="text"
@@ -84,6 +85,7 @@ export default function AddKeyResultModal({
                     className="flex justify-between flex-wrap gap-2"
                 >
                     <Input
+                        label={"Initial Value"}
                         value={keyResult.initialValue}
                         type="number"
                         placeholder="Initial Value"
@@ -92,6 +94,7 @@ export default function AddKeyResultModal({
                         }}
                     />
                     <Input
+                        label={"Current Value"}
                         value={keyResult.currentValue}
                         type="number"
                         placeholder="Current Value"
@@ -100,6 +103,7 @@ export default function AddKeyResultModal({
                         }}
                     />
                     <Input
+                        label={"Target Value"}
                         value={keyResult.targetValue}
                         type="number"
                         placeholder="Target Value"
@@ -108,6 +112,7 @@ export default function AddKeyResultModal({
                         }}
                     />
                     <Input
+                        label={"Metric"}
                         value={keyResult.metric}
                         type="text"
                         placeholder="Metrics Value"
