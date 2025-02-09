@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from "react";
 import {KeyResultModalType, ObjectiveType} from "../types/OKRTypes";
 import MetricsLabel from "./MetricLabel";
-import {FilePenLine, LoaderCircle, SquarePlus, Trash2} from "lucide-react";
+import {CircleCheck, FilePenLine, LoaderCircle, SquarePlus, Trash2} from "lucide-react";
 import AddKeyResultModal from "./AddKeyResultModal";
 import {OkrContext} from "../context/OkrProvider";
 import * as React from "react";
@@ -22,7 +22,7 @@ export default function OKRDisplay({
     });
 
     useEffect(() => {
-        if(!keyResultModal.isOpen){
+        if (!keyResultModal.isOpen) {
             (async () => {
                 const objectivesResponse = await getOkrsData();
                 setObjectives(objectivesResponse);
@@ -66,7 +66,7 @@ export default function OKRDisplay({
     return (
         <div
             id="showObjectives"
-            className="w-1/2 overflow-y-scroll flex flex-wrap gap-10"
+            className="w-1/2 h-[90%] rounded-md overflow-y-scroll flex flex-wrap gap-10"
         >
             {objectives != null && objectives.length > 0 ? (
                 objectives.map((objective, objectiveIdx) => {
@@ -99,21 +99,25 @@ export default function OKRDisplay({
                                                 objectiveIndex: objectiveIdx,
                                             })
                                         }
-                                        className="text-green-500"
+                                        className="text-secondary"
                                     >
                                         <SquarePlus className="w-4 h-4"/>
                                     </button>
                                     <button onClick={() => {
                                         setObjectiveForUpdate(objective)
                                     }}>
-                                        <FilePenLine className="w-4 h-4 text-blue-500"/>
+                                        <FilePenLine className="w-4 h-4 text-primary"/>
                                     </button>
                                 </div>
                             </div>
 
                             {objective.keyResults && objective.keyResults.length > 0 ? (
                                 objective.keyResults.map((keyResult, index) => (
-                                    <div key={index} className="relative pt-2 bg-gray-100 shadow p-3 mt-3 rounded-md">
+                                    <div key={index} className={`relative pt-2 bg-gray-100 shadow p-3 ${keyResult.currentValue >= keyResult.targetValue && index != 0 ? "mt-8" : "mt-3"} rounded-md shadow`}>
+                                        {
+                                            keyResult.currentValue >= keyResult.targetValue &&
+                                             <p className="absolute -top-4 flex items-center gap-x-1 text-xs bg-gray-600 font-medium text-white rounded-full px-2 py-1"><CircleCheck className="w-3.5 h-3.5" /> Done</p>
+                                        }
                                         <button
                                             onClick={() => deleteKeyResult(objectiveIdx, index, keyResult.id)}
                                             className="bg-red-500 text-white absolute top-1/2 -translate-y-1/2 -right-10 shadow-lg hover:shadow-inner rounded-full p-2"
@@ -121,23 +125,27 @@ export default function OKRDisplay({
                                             <Trash2 className="w-4 h-4"/>
                                         </button>
                                         <MetricsLabel
-                                            className="text-blue-500 font-medium"
+                                            className={`text-primary font-medium ${keyResult.currentValue >= keyResult.targetValue ? "mt-2" : ""}`}
                                             label={"Key"}
                                             value={keyResult.title}
                                         />
-                                        <MetricsLabel
-                                            label={"Initial Value"}
-                                            value={keyResult.initialValue}
-                                        />
-                                        <MetricsLabel
-                                            label={"Current Value"}
-                                            value={keyResult.currentValue}
-                                        />
-                                        <MetricsLabel
-                                            label={"Target Value"}
-                                            value={keyResult.targetValue}
-                                        />
                                         <MetricsLabel label={"Metrics"} value={keyResult.metric}/>
+                                        <MetricsLabel label={"Completion"} value={keyResult.currentValue} target={keyResult.targetValue}/>
+
+                                        <div className="w-full flex items-center justify-between mt-3">
+                                            <StatisticsCard
+                                                label={"Initial"}
+                                                value={keyResult.initialValue}
+                                            />
+                                            <StatisticsCard
+                                                label={"Current"}
+                                                value={keyResult.currentValue}
+                                            />
+                                            <StatisticsCard
+                                                label={"Target"}
+                                                value={keyResult.targetValue}
+                                            />
+                                        </div>
                                     </div>
                                 ))
                             ) : (
@@ -159,4 +167,14 @@ export default function OKRDisplay({
             )}
         </div>
     );
+}
+
+
+const StatisticsCard = ({label, value}: { label: string, value: number | string }) => {
+    return (
+        <div className="flex flex-col bg-white w-[60px] items-center justify-center text-xs font-medium p-2 rounded-md">
+            <p className="text-primary mb-1">{label}</p>
+            <p>{value}</p>
+        </div>
+    )
 }

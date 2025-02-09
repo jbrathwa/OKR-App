@@ -1,3 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.text-primary{
+    color: #12a6a7;
+}
+
+.bg-primary{
+    background-color: #12a6a7;
+}
+
+.text-secondary{
+    color: #91b30f;
+}
+
+.bg-secondary{
+    background-color: #91b30f;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #4a4a4a;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #1f1f1f;
+}

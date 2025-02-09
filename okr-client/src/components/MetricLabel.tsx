@@ -1,16 +1,18 @@
 const MetricsLabel = ({
   label,
   value,
+  target,
   className
 }: {
   label: string;
-  value: number | string;
+  value: string | number;
+  target?: number;
   className?: string;
 }) => {
   return (
     <div className={`w-full flex justify-between text-xs font-medium my-2 ${className}`}>
-      <p className={`text-gray-700 ${className} bg-white px-2 rounded-full`}>{label}</p> 
-      <p className="w-[100px] truncate text-right">{value}</p>
+      <p className={`text-gray-700 ${className} bg-white px-2 rounded-full`}>{label}</p>
+      <p className="w-[100px] truncate text-right">{label === "Completion" ? <meter value={value} min={0} max={target}></meter> : value}</p>
     </div>
   );
 };

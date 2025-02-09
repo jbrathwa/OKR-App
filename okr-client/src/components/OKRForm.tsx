@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from "react";
 import Input from "./Input";
 import {KeyResultType, ObjectiveType} from "../types/OKRTypes";
 import {addKeyResultToObjective, addOkrsDataToDB, updateOkrsDataToDb} from "../database/OKRStore";
-import {LoaderCircle} from "lucide-react";
+import {BetweenHorizonalStart, Goal, LoaderCircle} from "lucide-react";
 import {OkrContext} from "../context/OkrProvider";
 
 const defaultKeyResults = {
@@ -124,11 +124,12 @@ export default function OKRForm({
     return (
         <div
             id="addObjective"
-            className="w-2/5 overflow-y-scroll border-2 space-y-4 rounded-md bg-gray-50 shadow-md"
+            className="w-2/5 h-[90%] overflow-y-scroll border-2 space-y-4 rounded-md bg-gray-50 shadow-md"
         >
             <div className="sticky top-0 bg-gray-50 shadow-sm space-y-3 px-8 py-4">
-                <h1 className="font-bold text-lg text-blue-500 text-center">
-                    OKR Application
+                <h1 className="font-medium text-lg text-center">
+                    <span className="text-primary">Goal</span>Sync - <span
+                    className="text-secondary">OKR Application</span>
                 </h1>
 
                 <div id="objectForm" className="w-full flex flex-col space-y-2">
@@ -148,7 +149,7 @@ export default function OKRForm({
             </div>
             <hr/>
             {
-                keyResults.length > 0 &&
+                keyResults && keyResults.length > 0 &&
                 <div
                     className="w-full flex flex-col space-y-4 px-8 py-4"
                     id="keyResultForm"
@@ -164,7 +165,7 @@ export default function OKRForm({
                                 className="flex-grow"
                                 value={keyResult.title}
                                 type="text"
-                                placeholder="Key Result Title 1"
+                                placeholder="Enter a specific key-results of defined objective"
                                 onChange={(e) => {
                                     handleChange("title", e.target.value, index);
                                 }}
@@ -213,10 +214,10 @@ export default function OKRForm({
 
             <div
                 id="submitButton"
-                className="flex justify-between sticky bottom-0 bg-gray-50 px-8 py-4"
+                className="flex justify-between sticky bottom-0 bg-gray-50 px-8 py-5"
             >
                 {isUpdateForm ? <button
-                        className="bg-blue-400 hover:bg-blue-500  px-4 py-2 rounded-md text-white text-sm font-medium"
+                        className="bg-secondary hover:bg-gray-800 ease-linear px-4 py-2 rounded-md text-white text-sm font-medium"
                         onClick={() => {
                             setIsUpdateForm(false);
                             setNewObjective("");
@@ -224,19 +225,24 @@ export default function OKRForm({
                         }}>Cancel</button> :
                     <button
                         onClick={addNewKeyResults}
-                        className="bg-blue-400 hover:bg-blue-500  px-4 py-2 rounded-md text-white text-sm font-medium"
+                        className="bg-secondary hover:bg-gray-800 ease-linear px-4 py-2 rounded-md text-white text-sm font-medium flex items-center gap-x-1"
                     >
-                        Add key Results
+                        <BetweenHorizonalStart className="w-4 h-4"/>
+                        Add Inputs
                     </button>
                 }
                 <button
                     onClick={isUpdateForm ? handleUpdateObjective : addNewObjective}
-                    className="bg-green-400 hover:bg-green-500 px-4 py-2 rounded-md text-white text-sm font-medium flex items-center"
+                    className="bg-primary hover:bg-gray-800 px-4 py-2 rounded-md text-white text-sm font-medium flex items-center"
                 >
                     {isWaitingForResponse && (
                         <LoaderCircle className="w-4 h-4 mr-1 animate-spin"/>
                     )}{" "}
-                    {isUpdateForm ? "Update Objective" : `Add Objective`}
+                    {isUpdateForm ? "Update Objective" : <p className="flex items-center gap-x-1">
+                        <Goal className="w-4 h-4"/>
+                        <span>Set Goal</span>
+                    </p>
+                    }
                 </button>
             </div>
         </div>
