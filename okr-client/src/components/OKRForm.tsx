@@ -87,7 +87,13 @@ export default function OKRForm({
         const okrsToBeUpdated = {
             id: objectiveForUpdate.id,
             objective: newObjective,
-            keyResults: keyResults.map((keyResult) => {return {...keyResult, id: objectiveForUpdate.keyResults[0].id, objectiveId: objectiveForUpdate.keyResults[0].objectiveId}}),
+            keyResults: keyResults.map((keyResult) => {
+                return {
+                    ...keyResult,
+                    id: objectiveForUpdate.keyResults[0].id,
+                    objectiveId: objectiveForUpdate.keyResults[0].objectiveId
+                }
+            }),
         };
 
         updateOkrsDataToDb(okrsToBeUpdated).then(
@@ -141,77 +147,88 @@ export default function OKRForm({
                 </div>
             </div>
             <hr/>
-            <div
-                className="w-full flex flex-col space-y-4 px-8 py-4"
-                id="keyResultForm"
-            >
-                <h2 className="font-medium">Key Results</h2>
-                {keyResults.map((keyResult, index) => (
-                    <div
-                        key={index}
-                        id="firstKeyResult"
-                        className="flex flex-col space-y-2"
-                    >
-                        <Input
-                            className="flex-grow"
-                            value={keyResult.title}
-                            type="text"
-                            placeholder="Key Result Title 1"
-                            onChange={(e) => {
-                                handleChange("title", e.target.value, index);
-                            }}
-                        />
+            {
+                keyResults.length > 0 &&
+                <div
+                    className="w-full flex flex-col space-y-4 px-8 py-4"
+                    id="keyResultForm"
+                >
+                    <h2 className="font-medium">Key Results</h2>
+                    {keyResults && keyResults.map((keyResult, index) => (
                         <div
-                            id="firstKeyResultMetrics"
-                            className="flex justify-between flex-wrap gap-y-2"
+                            key={index}
+                            id="firstKeyResult"
+                            className="flex flex-col space-y-2"
                         >
                             <Input
-                                value={keyResult.initialValue}
-                                type="number"
-                                placeholder="Initial Value"
-                                onChange={(e) => {
-                                    handleChange("initialValue", parseInt(e.target.value), index);
-                                }}
-                            />
-                            <Input
-                                type="number"
-                                value={keyResult.currentValue}
-                                placeholder="Current Value"
-                                onChange={(e) => {
-                                    handleChange("currentValue", parseInt(e.target.value), index);
-                                }}
-                            />
-                            <Input
+                                className="flex-grow"
+                                value={keyResult.title}
                                 type="text"
-                                value={keyResult.metric}
-                                placeholder="Metrics Value"
+                                placeholder="Key Result Title 1"
                                 onChange={(e) => {
-                                    handleChange("metric", e.target.value, index);
+                                    handleChange("title", e.target.value, index);
                                 }}
                             />
-                            <Input
-                                type="number"
-                                value={keyResult.targetValue}
-                                placeholder="Target Value"
-                                onChange={(e) => {
-                                    handleChange("targetValue", parseInt(e.target.value), index);
-                                }}
-                            />
+                            <div
+                                id="firstKeyResultMetrics"
+                                className="flex justify-between flex-wrap gap-y-2"
+                            >
+                                <Input
+                                    value={keyResult.initialValue}
+                                    type="number"
+                                    placeholder="Initial Value"
+                                    onChange={(e) => {
+                                        handleChange("initialValue", parseInt(e.target.value), index);
+                                    }}
+                                />
+                                <Input
+                                    type="number"
+                                    value={keyResult.currentValue}
+                                    placeholder="Current Value"
+                                    onChange={(e) => {
+                                        handleChange("currentValue", parseInt(e.target.value), index);
+                                    }}
+                                />
+                                <Input
+                                    type="text"
+                                    value={keyResult.metric}
+                                    placeholder="Metrics Value"
+                                    onChange={(e) => {
+                                        handleChange("metric", e.target.value, index);
+                                    }}
+                                />
+                                <Input
+                                    type="number"
+                                    value={keyResult.targetValue}
+                                    placeholder="Target Value"
+                                    onChange={(e) => {
+                                        handleChange("targetValue", parseInt(e.target.value), index);
+                                    }}
+                                />
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            }
 
             <div
                 id="submitButton"
                 className="flex justify-between sticky bottom-0 bg-gray-50 px-8 py-4"
             >
-                <button
-                    onClick={addNewKeyResults}
-                    className="bg-blue-400 hover:bg-blue-500  px-4 py-2 rounded-md text-white text-sm font-medium"
-                >
-                    Add key Results
-                </button>
+                {isUpdateForm ? <button
+                        className="bg-blue-400 hover:bg-blue-500  px-4 py-2 rounded-md text-white text-sm font-medium"
+                        onClick={() => {
+                            setIsUpdateForm(false);
+                            setNewObjective("");
+                            setKeyResults([defaultKeyResults]);
+                        }}>Cancel</button> :
+                    <button
+                        onClick={addNewKeyResults}
+                        className="bg-blue-400 hover:bg-blue-500  px-4 py-2 rounded-md text-white text-sm font-medium"
+                    >
+                        Add key Results
+                    </button>
+                }
                 <button
                     onClick={isUpdateForm ? handleUpdateObjective : addNewObjective}
                     className="bg-green-400 hover:bg-green-500 px-4 py-2 rounded-md text-white text-sm font-medium flex items-center"
