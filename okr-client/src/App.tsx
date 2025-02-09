@@ -3,8 +3,8 @@ import { ObjectiveType } from "./types/OKRTypes";
 import OKRForm from "./components/OKRForm";
 import OKRDisplay from "./components/OKRDisplay";
 import { getOkrsData } from "./database/OKRStore";
-import { LoaderCircle } from "lucide-react";
 import { OkrContext } from "./context/OkrProvider";
+import InitialLoader from "./components/InitialLoader.tsx";
 
 function App() {
   const {objectives, setObjectives} = useContext(OkrContext);
@@ -25,29 +25,30 @@ function App() {
     ],
   });
 
-  
+
   const isLoading = objectives?.length === 0;
-  
+
   useEffect(() => {
     (async () => {
       const objectivesResponse = await getOkrsData();
-      setObjectives(objectivesResponse);
+      setTimeout(()=>{
+          setObjectives(objectivesResponse);
+      }, 3000)
     })();
   }, []);
 
   return (
-    <main className="w-full h-screen flex justify-between space-y-4">
-      <OKRForm objectiveForUpdate={objectiveForUpdate} />
-      {isLoading ? (
-        <p className="m-auto text-lg text-blue-400 font-medium flex items-center justify-center">
-          <LoaderCircle className="animate-spin mr-2" /> Fetching your data...
-        </p>
-      ) : (
-        <OKRDisplay
-            objectiveForUpdate={objectiveForUpdate}
-          setObjectiveForUpdate={setObjectiveForUpdate}
-        />
-      )}
+    <main className="w-full bg-[url(https://www.toptal.com/designers/subtlepatterns/uploads/dot-grid.png)] bg-opacity-30 h-screen flex justify-around items-center space-y-4">
+      {
+        isLoading ? <InitialLoader /> :
+        <>
+          <OKRForm objectiveForUpdate={objectiveForUpdate}/>
+              <OKRDisplay
+                  objectiveForUpdate={objectiveForUpdate}
+                  setObjectiveForUpdate={setObjectiveForUpdate}
+              />
+        </>
+      }
     </main>
   );
 }
