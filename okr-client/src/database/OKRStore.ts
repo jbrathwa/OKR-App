@@ -22,13 +22,24 @@ async function addOkrsDataToDB(objective: { objective: string }): Promise<Object
 }
 
 async function updateOkrsDataToDb(objectiveTobeUpdated: ObjectiveType): Promise<ObjectiveType> {
-    const response = await fetch(`${import.meta.env.VITE_LOCAL_URL}/objectives`, {
-        method: "PUT",
-        body: JSON.stringify(objectiveTobeUpdated),
-        headers: {
-            "Content-Type": "application/json",
-        }
-    })
+    let response;
+    if (objectiveTobeUpdated.keyResults.length > 0) {
+        response = await fetch(`${import.meta.env.VITE_LOCAL_URL}/objectives`, {
+            method: "PUT",
+            body: JSON.stringify(objectiveTobeUpdated),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+    } else {
+        response = await fetch(`${import.meta.env.VITE_LOCAL_URL}/objectives`, {
+            method: "PATCH",
+            body: JSON.stringify({objective: objectiveTobeUpdated.objective, id: objectiveTobeUpdated.id}),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+    }
     console.log(objectiveTobeUpdated);
     return await response.json();
 }
@@ -49,7 +60,10 @@ async function deleteOkrsDataFromDB(okrId: string): Promise<ObjectiveType> {
 }
 
 
-async function deleteKeyResultOfObjective(keyResultId: string): Promise<KeyResultType & {id: string, objectiveId: string}> {
+async function deleteKeyResultOfObjective(keyResultId: string): Promise<KeyResultType & {
+    id: string,
+    objectiveId: string
+}> {
     const response = await fetch(`${import.meta.env.VITE_LOCAL_URL}/key-results`, {
         method: "DELETE",
         body: JSON.stringify({"id": keyResultId}),
@@ -61,9 +75,10 @@ async function deleteKeyResultOfObjective(keyResultId: string): Promise<KeyResul
     return await response.json();
 }
 
-type ResponseKeyResultType = KeyResultType & {id: string, objectiveId: string};
+type ResponseKeyResultType = KeyResultType & { id: string, objectiveId: string };
+
 async function addKeyResultToObjective(keyResult: InsertKeyResultType[], objectiveId: string): Promise<ResponseKeyResultType[]> {
-    const keyResultToBeInserted = keyResult.map((keyResult)=>{
+    const keyResultToBeInserted = keyResult.map((keyResult) => {
         return {...keyResult, objectiveId: objectiveId};
     })
     const response = await fetch(`${import.meta.env.VITE_LOCAL_URL}/key-results`, {
@@ -74,7 +89,15 @@ async function addKeyResultToObjective(keyResult: InsertKeyResultType[], objecti
         }
     })
 
-    const keyResultsData =  await response.json();
+    const keyResultsData = await response.json();
     return [...keyResultsData];
 }
-export {getOkrsData, addOkrsDataToDB, updateOkrsDataToDb, deleteOkrsDataFromDB, deleteKeyResultOfObjective, addKeyResultToObjective};
+
+export {
+    getOkrsData,
+    addOkrsDataToDB,
+    updateOkrsDataToDb,
+    deleteOkrsDataFromDB,
+    deleteKeyResultOfObjective,
+    addKeyResultToObjective
+};
