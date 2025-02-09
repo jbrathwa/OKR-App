@@ -21,11 +21,15 @@ async function addOkrsDataToDB(objective: { objective: string }): Promise<Object
     return await response.json();
 }
 
-async function updateOkrsDataToDb(objectiveTobeUpdated: { objective: string }, okrId: string): Promise<ObjectiveType> {
-    const response = await fetch(`${import.meta.env.VITE_LOCAL_URL}/objectives/${okrId}`, {
+async function updateOkrsDataToDb(objectiveTobeUpdated: ObjectiveType): Promise<ObjectiveType> {
+    const response = await fetch(`${import.meta.env.VITE_LOCAL_URL}/objectives`, {
         method: "PUT",
         body: JSON.stringify(objectiveTobeUpdated),
+        headers: {
+            "Content-Type": "application/json",
+        }
     })
+    console.log(objectiveTobeUpdated);
     return await response.json();
 }
 

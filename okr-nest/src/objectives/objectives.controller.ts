@@ -1,6 +1,6 @@
-import {Body, Controller, Delete, Get, Patch, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Patch, Post, Put} from '@nestjs/common';
 import {ObjectivesService} from "./objectives.service";
-import {ObjectiveReqDTO} from "./ObjectiveDTO";
+import {ObjectiveReqDTO, OkrsDTO} from "./ObjectiveDTO";
 
 @Controller('objectives')
 export class ObjectivesController {
@@ -25,5 +25,10 @@ export class ObjectivesController {
     @Patch("/")
     patch(@Body() okr: ObjectiveReqDTO & {id: string}) {
         return this.objectivesService.patch(okr);
+    }
+
+    @Put("/")
+    put(@Body() okr: OkrsDTO) {
+        return this.objectivesService.put(okr);
     }
 }

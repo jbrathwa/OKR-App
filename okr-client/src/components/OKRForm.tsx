@@ -84,16 +84,20 @@ export default function OKRForm({
     function handleUpdateObjective() {
         setIsWaitingForResponse(true);
 
-        const objectiveToBeUpdated = {
+        const okrsToBeUpdated = {
+            id: objectiveForUpdate.id,
             objective: newObjective,
+            keyResults: keyResults.map((keyResult) => {return {...keyResult, id: objectiveForUpdate.keyResults[0].id, objectiveId: objectiveForUpdate.keyResults[0].objectiveId}}),
         };
 
-        updateOkrsDataToDb(objectiveToBeUpdated, objectiveForUpdate.id).then(
+        updateOkrsDataToDb(okrsToBeUpdated).then(
             (data) => {
                 if (objectives === null) return;
                 const updatedObjectives = objectives.map((objective) => {
-                    return objective.id === data.id ? data : objective;
+                    return objective.id === data.id ? okrsToBeUpdated
+                        : objective;
                 });
+
                 setObjectives([...updatedObjectives]);
 
                 // Reset

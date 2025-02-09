@@ -28,5 +28,6 @@ export type {
   ObjectiveType,
   KeyResultModalType,
   InsertObjectiveType,
-  InsertKeyResultType
+  InsertKeyResultType,
+  KeyResultToBeRead
 };
