@@ -82,7 +82,7 @@ export default function OKRDisplay({
                                 </div>)
                                 : ""}
                             <div className="flex items-center justify-between">
-                                <h1 className="font-bold text-lg w-[180px] truncate mb-2">
+                                <h1 className="font-bold text-lg w-[170px] truncate mb-2">
                                     {objective.objective}
                                 </h1>
                                 <div className="flex items-center gap-x-3 -mt-2">

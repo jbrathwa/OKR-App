@@ -93,11 +93,17 @@ async function addKeyResultToObjective(keyResult: InsertKeyResultType[], objecti
     return [...keyResultsData];
 }
 
+async function generateKeyResultFromLLM(objective: string): Promise<KeyResultType> {
+    const response = await fetch(`${import.meta.env.VITE_LOCAL_URL}/rag?objective=${objective}`);
+    return await response.json();
+}
+
 export {
     getOkrsData,
     addOkrsDataToDB,
     updateOkrsDataToDb,
     deleteOkrsDataFromDB,
     deleteKeyResultOfObjective,
-    addKeyResultToObjective
+    addKeyResultToObjective,
+    generateKeyResultFromLLM
 };

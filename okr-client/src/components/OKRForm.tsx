@@ -1,8 +1,13 @@
 import {useContext, useEffect, useState} from "react";
 import Input from "./Input";
 import {KeyResultType, ObjectiveType} from "../types/OKRTypes";
-import {addKeyResultToObjective, addOkrsDataToDB, updateOkrsDataToDb} from "../database/OKRStore";
-import {BetweenHorizonalStart, Goal, LoaderCircle} from "lucide-react";
+import {
+    addKeyResultToObjective,
+    addOkrsDataToDB,
+    generateKeyResultFromLLM,
+    updateOkrsDataToDb
+} from "../database/OKRStore";
+import {BetweenHorizonalStart, Goal, LoaderCircle, Sparkles} from "lucide-react";
 import {OkrContext} from "../context/OkrProvider";
 
 const defaultKeyResults = {
@@ -29,6 +34,8 @@ export default function OKRForm({
     const [keyResults, setKeyResults] = useState<KeyResultType[]>([
         defaultKeyResults,
     ]);
+
+    const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
     useEffect(() => {
         if (objectiveForUpdate.id) {
@@ -79,6 +86,21 @@ export default function OKRForm({
             .catch((error) => {
                 alert(error)
             });
+    }
+
+    function handleGenerateKeyResultFromLLM() {
+        if (newObjective.length == 0) {
+            alert("Please fill all required field value");
+        } else {
+            setIsGenerating(true);
+            generateKeyResultFromLLM(newObjective).then((keyResult: KeyResultType) => {
+                setKeyResults([keyResult]);
+                setIsGenerating(false);
+            }).catch((error) => {
+                alert(error)
+                setIsGenerating(false);
+            })
+        }
     }
 
     function handleUpdateObjective() {
@@ -154,7 +176,18 @@ export default function OKRForm({
                     className="w-full flex flex-col space-y-4 px-8 py-4"
                     id="keyResultForm"
                 >
-                    <h2 className="font-medium">Key Results</h2>
+                    <div className="w-full flex justify-between items-center">
+                        <h2 className="font-medium">
+                            Key Results
+                        </h2>
+                        <button
+                            onClick={() => handleGenerateKeyResultFromLLM()}
+                            className="bg-white border-2 border-[#12a6a7] hover:border-gray-700 hover:bg-gray-700 hover:text-white text-primary ease-linear flex items-center gap-x-1.5 px-4 py-2 rounded-md text-sm font-medium"
+                        >
+                            <Sparkles
+                                className={`w-4 h-4 -rotate-45 ${isGenerating ? "animate-ping" : ""}`}/> Generate
+                        </button>
+                    </div>
                     {keyResults && keyResults.map((keyResult, index) => (
                         <div
                             key={index}
