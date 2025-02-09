@@ -124,10 +124,10 @@ export default function OKRForm({
     return (
         <div
             id="addObjective"
-            className="w-2/5 h-[90%] overflow-y-scroll border-2 space-y-4 rounded-md bg-gray-50 shadow-md"
+            className="w-2/5 h-[90%] overflow-y-scroll space-y-4 rounded-md bg-gray-50 border-1 shadow-md"
         >
-            <div className="sticky top-0 bg-gray-50 shadow-sm space-y-3 px-8 py-4">
-                <h1 className="font-medium text-lg text-center">
+            <div className="sticky top-0 bg-gray-50 space-y-3 px-8 py-4">
+                <h1 className="font-medium text-lg mt-2 text-center">
                     <span className="text-primary">Goal</span>Sync - <span
                     className="text-secondary">OKR Application</span>
                 </h1>
