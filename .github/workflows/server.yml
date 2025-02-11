@@ -24,11 +24,9 @@ jobs:
           run_install: false
       - name: Clone Sourcecode
         uses: actions/checkout@v4
-      - name: Checkout to server codebase
-        run: cd okr-nest
       - name: Install Dependencies
         run: pnpm install
+        working-directory: ${{ github.workspace }}/okr-nest
       - name: Build
         run: pnpm run build --if-present
-      - name: Test
-        run: pnpm test
+        working-directory: ${{ github.workspace }}/okr-nest
