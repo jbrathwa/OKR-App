@@ -8,6 +8,10 @@ jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-22.04
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ github.workspace }}
     steps:
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -21,10 +25,10 @@ jobs:
       - name: Clone Sourcecode
         uses: actions/checkout@v4
       - name: Checkout to server codebase
-        run: cd OKR-App/okr-nest
+        run: cd okr-nest
       - name: Install Dependencies
         run: pnpm install
       - name: Build
         run: pnpm run build --if-present
       - name: Test
-        run: npm test
+        run: pnpm test
